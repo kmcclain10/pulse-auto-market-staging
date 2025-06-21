@@ -333,15 +333,18 @@ frontend:
 
   - task: "Admin Dashboard - Stats Display"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test admin stats display with vehicle and dealer counts."
+      - working: true
+        agent: "testing"
+        comment: "Admin dashboard statistics display correctly with 5 stat cards showing Total Vehicles (8), Active Dealers (8), Recent Vehicles (8), Jobs Pending (0), and Jobs Running (0). The counts match the expected values from the populated database."
 
   - task: "Admin Dashboard - Scraping Controls"
     implemented: true
