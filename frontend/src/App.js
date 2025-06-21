@@ -300,6 +300,7 @@ const DealerPricing = () => {
 // Dealer Portal with Enhanced Sidebar
 const DealerPortal = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const sidebarItems = [
     { id: 'dashboard', name: 'Dashboard', icon: '📊', category: 'main' },
@@ -338,13 +339,31 @@ const DealerPortal = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* Enhanced Sidebar */}
-      <div className="w-80 bg-white shadow-xl">
+      <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-0`}>
         <div className="p-6 border-b bg-gradient-to-r from-purple-600 to-purple-700 text-white">
-          <h2 className="text-xl font-bold">Dealer Portal</h2>
-          <p className="text-purple-200">Welcome back, John's Auto</p>
-          <div className="mt-2 text-sm">
-            <span className="bg-purple-500 px-2 py-1 rounded text-xs">Professional Plan</span>
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-bold">Dealer Portal</h2>
+              <p className="text-purple-200">Welcome back, John's Auto</p>
+              <div className="mt-2 text-sm">
+                <span className="bg-purple-500 px-2 py-1 rounded text-xs">Professional Plan</span>
+              </div>
+            </div>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="md:hidden text-white hover:text-purple-200"
+            >
+              ✕
+            </button>
           </div>
         </div>
         
@@ -359,7 +378,10 @@ const DealerPortal = () => {
                 .map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => setActiveTab(item.id)}
+                    onClick={() => {
+                      setActiveTab(item.id);
+                      setSidebarOpen(false); // Close sidebar on mobile after selection
+                    }}
                     className={`w-full flex items-center px-6 py-3 text-left hover:bg-purple-50 transition-colors text-sm ${
                       activeTab === item.id 
                         ? 'bg-purple-50 border-r-4 border-purple-600 text-purple-600 font-medium' 
@@ -377,6 +399,20 @@ const DealerPortal = () => {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
+        {/* Mobile Menu Button */}
+        <div className="md:hidden bg-white border-b border-gray-200 p-4 flex justify-between items-center">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <h1 className="text-lg font-semibold text-gray-900">Dealer Portal</h1>
+          <div></div>
+        </div>
+
         <div className="p-8">
           {activeTab === 'dashboard' && <DashboardContent />}
           {activeTab === 'inventory' && <InventoryManagerContent />}
