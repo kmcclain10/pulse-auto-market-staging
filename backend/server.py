@@ -784,6 +784,61 @@ async def admin_login(username: str, password: str):
     else:
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
+@admin_router.post("/scrape-dealer-photos")
+async def scrape_dealer_photos(dealer_url: str, max_vehicles: int = 5):
+    """Run the DealerCarSearch scraper to get real dealer photos"""
+    try:
+        # Import the dealercarsearch scraper
+        from backend.scraper.dealercarsearch_scraper import DealerCarSearchScraper
+        
+        scraper = DealerCarSearchScraper()
+        await scraper.initialize_browser()
+        
+        # Scrape vehicles with real photos
+        vehicles_data = await scraper.scrape_dealer(dealer_url, max_vehicles=max_vehicles)
+        
+        # Save vehicles to database
+        saved_count = 0
+        for vehicle_data in vehicles_data:
+            # Convert to Vehicle model and save
+            vehicle = Vehicle(
+                make=vehicle_data.make,
+                model=vehicle_data.model,
+                year=vehicle_data.year,
+                price=vehicle_data.price,
+                mileage=vehicle_data.mileage,
+                condition="used",
+                images=vehicle_data.images,  # Real dealer photos
+                dealer_id=vehicle_data.dealer_id or "dealer_scraped",
+                dealer_name=vehicle_data.dealer_name or "Scraped Dealer",
+                dealer_city=vehicle_data.dealer_city,
+                dealer_state=vehicle_data.dealer_state,
+                source_url=dealer_url
+            )
+            await db.vehicles.insert_one(vehicle.dict())
+            saved_count += 1
+        
+        await scraper.close()
+        
+        return {
+            "status": "success",
+            "dealer_url": dealer_url,
+            "vehicles_found": len(vehicles_data),
+            "vehicles_saved": saved_count,
+            "message": f"Successfully scraped {saved_count} vehicles with real dealer photos"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error scraping dealer photos: {str(e)}")
+        return {
+            "status": "error",
+            "dealer_url": dealer_url,
+            "vehicles_found": 0,
+            "vehicles_saved": 0,
+            "error": str(e),
+            "message": "Failed to scrape dealer photos"
+        }
+
 @admin_router.get("/stats")
 async def get_admin_stats():
     """Get system statistics"""
