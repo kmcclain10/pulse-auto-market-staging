@@ -398,17 +398,9 @@ metadata:
   run_ui: true
 
 test_plan:
-  current_focus:
-    - "Interface Selection Page"
-    - "Customer Portal - Vehicle Search"
-    - "Customer Portal - Makes Dropdown"
-    - "Dealer Portal - Inventory Dashboard"
-    - "Admin Dashboard - Stats Display"
-    - "Admin Dashboard - Scraping Controls"
-    - "Navigation Between Interfaces"
-    - "System Status Component"
+  current_focus: []
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
