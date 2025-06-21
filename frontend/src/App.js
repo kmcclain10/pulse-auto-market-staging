@@ -426,23 +426,278 @@ const DashboardContent = () => (
   </div>
 );
 
-// Inventory Management Content
-const InventoryContent = () => (
-  <div>
-    <div className="flex justify-between items-center mb-8">
-      <h1 className="text-3xl font-bold text-gray-900">Inventory Management</h1>
-      <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-        Add Vehicle
-      </button>
-    </div>
-    <div className="bg-white rounded-lg shadow">
-      <div className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Your Vehicles</h3>
-        <p className="text-gray-600">Manage your vehicle inventory, pricing, and listings.</p>
+// Enhanced Inventory Manager Content
+const InventoryManagerContent = () => {
+  const [vehicles, setVehicles] = useState([
+    {
+      id: 1,
+      year: 2022,
+      make: "Ford",
+      model: "F-150",
+      trim: "XLT SuperCrew",
+      vin: "1FTFW1E50NFA12345",
+      stock_number: "F150-001",
+      price: 42999,
+      mileage: 15420,
+      exterior_color: "Magnetic Metallic",
+      interior_color: "Black",
+      transmission: "10-Speed Automatic",
+      drivetrain: "4WD",
+      fuel_type: "Regular Unleaded V8",
+      engine: "5.0L V8",
+      mpg_city: 17,
+      mpg_highway: 24,
+      images: ["https://via.placeholder.com/800x600/6366f1/ffffff?text=Ford+F-150"],
+      features: ["Heated Seats", "Backup Camera", "Bluetooth", "Remote Start"],
+      description: "Clean, well-maintained F-150 with low miles. Perfect for work or family use.",
+      status: "Available",
+      days_on_lot: 12,
+      views: 247,
+      leads: 8
+    },
+    {
+      id: 2,
+      year: 2021,
+      make: "Toyota",
+      model: "Camry",
+      trim: "LE",
+      vin: "4T1G11AK3MU123456",
+      stock_number: "CAM-002",
+      price: 26995,
+      mileage: 28350,
+      exterior_color: "Midnight Black Metallic",
+      interior_color: "Black",
+      transmission: "8-Speed Automatic",
+      drivetrain: "FWD",
+      fuel_type: "Regular Unleaded I4",
+      engine: "2.5L I4",
+      mpg_city: 28,
+      mpg_highway: 39,
+      images: ["https://via.placeholder.com/800x600/6366f1/ffffff?text=Toyota+Camry"],
+      features: ["Toyota Safety Sense", "Apple CarPlay", "Lane Keeping Assist"],
+      description: "Reliable and fuel-efficient sedan with excellent safety ratings.",
+      status: "Available",
+      days_on_lot: 8,
+      views: 156,
+      leads: 5
+    }
+  ]);
+  
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    status: 'all',
+    make: 'all',
+    price_range: 'all'
+  });
+
+  const handleViewVDP = (vehicle) => {
+    setSelectedVehicle(vehicle);
+  };
+
+  const handleEditVehicle = (vehicleId) => {
+    // Handle edit functionality
+    console.log('Edit vehicle:', vehicleId);
+  };
+
+  const handleDeleteVehicle = (vehicleId) => {
+    setVehicles(vehicles.filter(v => v.id !== vehicleId));
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Available': return 'bg-green-100 text-green-800';
+      case 'Pending': return 'bg-yellow-100 text-yellow-800';
+      case 'Sold': return 'bg-blue-100 text-blue-800';
+      case 'Hold': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Inventory Manager</h1>
+          <p className="text-gray-600">Manage your vehicle listings and track performance</p>
+        </div>
+        <div className="flex space-x-3">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+          >
+            🔍 Filters
+          </button>
+          <button className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all">
+            ➕ Add Vehicle
+          </button>
+        </div>
       </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Total Inventory</h3>
+          <p className="text-3xl font-bold text-purple-600">{vehicles.length}</p>
+          <p className="text-sm text-green-600">+2 this week</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Avg Days on Lot</h3>
+          <p className="text-3xl font-bold text-blue-600">18</p>
+          <p className="text-sm text-blue-600">Industry avg: 24</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Total Views</h3>
+          <p className="text-3xl font-bold text-green-600">1,247</p>
+          <p className="text-sm text-green-600">+15% this month</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Active Leads</h3>
+          <p className="text-3xl font-bold text-orange-600">23</p>
+          <p className="text-sm text-orange-600">18% conversion</p>
+        </div>
+      </div>
+
+      {/* Filters */}
+      {showFilters && (
+        <div className="bg-white p-6 rounded-lg shadow mb-6">
+          <h3 className="text-lg font-semibold mb-4">Filter Inventory</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <select
+              className="border border-gray-300 rounded-lg px-3 py-2"
+              value={filters.status}
+              onChange={(e) => setFilters({...filters, status: e.target.value})}
+            >
+              <option value="all">All Status</option>
+              <option value="Available">Available</option>
+              <option value="Pending">Pending</option>
+              <option value="Sold">Sold</option>
+              <option value="Hold">Hold</option>
+            </select>
+            <select
+              className="border border-gray-300 rounded-lg px-3 py-2"
+              value={filters.make}
+              onChange={(e) => setFilters({...filters, make: e.target.value})}
+            >
+              <option value="all">All Makes</option>
+              <option value="Ford">Ford</option>
+              <option value="Toyota">Toyota</option>
+              <option value="Honda">Honda</option>
+              <option value="Chevrolet">Chevrolet</option>
+            </select>
+            <select
+              className="border border-gray-300 rounded-lg px-3 py-2"
+              value={filters.price_range}
+              onChange={(e) => setFilters({...filters, price_range: e.target.value})}
+            >
+              <option value="all">All Prices</option>
+              <option value="under-20k">Under $20,000</option>
+              <option value="20k-40k">$20,000 - $40,000</option>
+              <option value="over-40k">Over $40,000</option>
+            </select>
+          </div>
+        </div>
+      )}
+
+      {/* Vehicle Inventory Table */}
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vehicle</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Performance</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {vehicles.map((vehicle) => (
+                <tr key={vehicle.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center">
+                      <div className="h-16 w-24 bg-gray-200 rounded overflow-hidden mr-4">
+                        {vehicle.images && vehicle.images.length > 0 ? (
+                          <img
+                            src={vehicle.images[0]}
+                            alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                            No Photo
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          {vehicle.year} {vehicle.make} {vehicle.model}
+                        </div>
+                        <div className="text-sm text-gray-500">{vehicle.trim}</div>
+                        <div className="text-sm text-gray-500">Stock: {vehicle.stock_number}</div>
+                        <div className="text-sm text-gray-500">{vehicle.mileage?.toLocaleString()} mi</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-lg font-semibold text-green-600">
+                      ${vehicle.price?.toLocaleString()}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(vehicle.status)}`}>
+                      {vehicle.status}
+                    </span>
+                    <div className="text-xs text-gray-500 mt-1">
+                      {vehicle.days_on_lot} days on lot
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm">
+                      <div>👁️ {vehicle.views} views</div>
+                      <div>📧 {vehicle.leads} leads</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleViewVDP(vehicle)}
+                        className="text-purple-600 hover:text-purple-900 text-sm font-medium"
+                      >
+                        View VDP
+                      </button>
+                      <button
+                        onClick={() => handleEditVehicle(vehicle.id)}
+                        className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteVehicle(vehicle.id)}
+                        className="text-red-600 hover:text-red-900 text-sm font-medium"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Vehicle Details Page Modal */}
+      {selectedVehicle && (
+        <VehicleDetailsPage 
+          vehicle={selectedVehicle} 
+          onClose={() => setSelectedVehicle(null)} 
+        />
+      )}
     </div>
-  </div>
-);
+  );
+};
 
 // AI CRM Content
 const CRMContent = () => (
