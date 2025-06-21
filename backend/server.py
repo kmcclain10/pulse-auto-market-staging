@@ -153,6 +153,10 @@ class RepairShopService:
     async def get_service_history(self, vehicle_id: str) -> List[Dict[str, Any]]:
         """Get service history for a vehicle"""
         services = await self.db.services.find({"vehicle_id": vehicle_id}).to_list(100)
+        # Convert ObjectId to string for JSON serialization
+        for service in services:
+            if "_id" in service:
+                service["_id"] = str(service["_id"])
         return services
 
 # Initialize CRM services
