@@ -880,6 +880,7 @@ const VehicleDetailsPage = ({ vehicle, onClose }) => {
 const HomePage = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [filters, setFilters] = useState({
     make: '',
     model: '',
@@ -928,15 +929,19 @@ const HomePage = () => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 
+  const handleViewDetails = (vehicle) => {
+    setSelectedVehicle(vehicle);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section with Search */}
-      <section className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white py-16">
+      <section className="bg-gradient-to-r from-purple-900 via-purple-800 to-indigo-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             Find Your Perfect Vehicle
           </h2>
-          <p className="text-xl md:text-2xl text-blue-200 mb-12">
+          <p className="text-xl md:text-2xl text-purple-200 mb-12">
             Thousands of quality cars from trusted dealers nationwide
           </p>
 
@@ -947,7 +952,7 @@ const HomePage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Make</label>
                   <select 
-                    className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                     value={filters.make}
                     onChange={(e) => handleFilterChange('make', e.target.value)}
                   >
@@ -968,7 +973,7 @@ const HomePage = () => {
                   <input
                     type="text"
                     placeholder="e.g., Camry, F-150"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                     value={filters.model}
                     onChange={(e) => handleFilterChange('model', e.target.value)}
                   />
@@ -977,7 +982,7 @@ const HomePage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Max Price</label>
                   <select 
-                    className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                     value={filters.price_max}
                     onChange={(e) => handleFilterChange('price_max', e.target.value)}
                   >
@@ -993,7 +998,7 @@ const HomePage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Max Mileage</label>
                   <select 
-                    className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                     value={filters.mileage_max}
                     onChange={(e) => handleFilterChange('mileage_max', e.target.value)}
                   >
@@ -1008,7 +1013,7 @@ const HomePage = () => {
 
               <button
                 onClick={handleSearch}
-                className="w-full bg-blue-600 text-white py-4 px-8 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg"
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-4 px-8 rounded-lg text-lg font-semibold hover:from-purple-700 hover:to-purple-800 transition-all duration-200 shadow-lg"
               >
                 Search Vehicles
               </button>
@@ -1030,7 +1035,7 @@ const HomePage = () => {
 
         {loading && (
           <div className="text-center py-16">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
             <p className="mt-4 text-gray-600">Loading vehicles...</p>
           </div>
         )}
@@ -1038,7 +1043,11 @@ const HomePage = () => {
         {!loading && vehicles.length > 0 && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {vehicles.map(vehicle => (
-              <VehicleCard key={vehicle.id || vehicle.vin} vehicle={vehicle} />
+              <VehicleCard 
+                key={vehicle.id || vehicle.vin} 
+                vehicle={vehicle} 
+                onViewDetails={handleViewDetails}
+              />
             ))}
           </div>
         )}
@@ -1052,13 +1061,21 @@ const HomePage = () => {
                 setFilters({ make: '', model: '', price_max: '', mileage_max: '' });
                 loadFeaturedVehicles();
               }}
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-8 py-3 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-medium"
             >
               View All Vehicles
             </button>
           </div>
         )}
       </main>
+
+      {/* Vehicle Details Page Modal */}
+      {selectedVehicle && (
+        <VehicleDetailsPage 
+          vehicle={selectedVehicle} 
+          onClose={() => setSelectedVehicle(null)} 
+        />
+      )}
     </div>
   );
 };
