@@ -525,7 +525,7 @@ const VehicleCard = ({ vehicle }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100">
-      {/* Vehicle Image */}
+      {/* Vehicle Image - REAL DEALER PHOTOS ONLY */}
       <div className="relative h-56 bg-gradient-to-br from-gray-100 to-gray-200">
         {vehicle.images && vehicle.images.length > 0 ? (
           <img 
@@ -533,16 +533,20 @@ const VehicleCard = ({ vehicle }) => {
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
             className="w-full h-full object-cover"
             onError={(e) => {
-              // Use a more realistic placeholder
-              e.target.src = `https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop&crop=center&auto=format&q=60`;
+              // Hide broken real images, don't use stock photos
+              e.target.style.display = 'none';
             }}
           />
         ) : (
-          <img 
-            src={`https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop&crop=center&auto=format&q=60`}
-            alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
-            className="w-full h-full object-cover"
-          />
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
+            <div className="text-center p-4">
+              <div className="text-2xl font-bold text-blue-600 mb-2">
+                {vehicle.year} {vehicle.make}
+              </div>
+              <div className="text-lg text-blue-500">{vehicle.model}</div>
+              <div className="text-sm text-gray-500 mt-2">Real photo loading...</div>
+            </div>
+          </div>
         )}
         
         {/* Deal Badge */}
