@@ -1567,7 +1567,337 @@ const HomePage = () => {
 
 // Other page components (simplified for now)
 const InventoryPage = () => <div className="min-h-screen bg-gray-50 py-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h1 className="text-3xl font-bold text-gray-900 mb-6">Complete Inventory</h1></div></div>;
-const ServicePage = () => <div className="min-h-screen bg-gray-50 py-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h1 className="text-3xl font-bold text-gray-900 mb-6">Service & Repairs</h1></div></div>;
+// Service & Repairs Page
+const ServicePage = () => {
+  const [repairShops, setRepairShops] = useState([]);
+  const [selectedService, setSelectedService] = useState('');
+  const [estimate, setEstimate] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [bookingForm, setBookingForm] = useState({
+    vehicle_make: '',
+    vehicle_model: '',
+    service_type: '',
+    customer_name: '',
+    customer_phone: '',
+    preferred_shop: '',
+    scheduled_date: ''
+  });
+  const [showBookingForm, setShowBookingForm] = useState(false);
+
+  const serviceTypes = [
+    'Oil Change',
+    'Brake Service', 
+    'Tire Service',
+    'Engine Repair',
+    'Transmission',
+    'AC Repair',
+    'Inspection',
+    'Engine Diagnostics'
+  ];
+
+  useEffect(() => {
+    loadRepairShops();
+  }, []);
+
+  const loadRepairShops = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${API}/repair-shops?city=Nashville&state=TN`);
+      setRepairShops(response.data.repair_shops);
+    } catch (error) {
+      console.error('Error loading repair shops:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getEstimate = async () => {
+    if (!selectedService || !bookingForm.vehicle_make || !bookingForm.vehicle_model) return;
+    
+    try {
+      const response = await axios.get(
+        `${API}/service/estimate?service_type=${selectedService}&vehicle_make=${bookingForm.vehicle_make}&vehicle_model=${bookingForm.vehicle_model}`
+      );
+      setEstimate(response.data);
+    } catch (error) {
+      console.error('Error getting estimate:', error);
+    }
+  };
+
+  const handleBookService = async () => {
+    try {
+      const response = await axios.post(`${API}/service/schedule`, null, {
+        params: {
+          ...bookingForm,
+          service_type: selectedService
+        }
+      });
+      
+      alert(`Service scheduled! Confirmation: ${response.data.confirmation}`);
+      setShowBookingForm(false);
+      setBookingForm({
+        vehicle_make: '',
+        vehicle_model: '',
+        service_type: '',
+        customer_name: '',
+        customer_phone: '',
+        preferred_shop: '',
+        scheduled_date: ''
+      });
+    } catch (error) {
+      console.error('Error booking service:', error);
+      alert('Error booking service. Please try again.');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <section className="bg-gradient-to-r from-purple-900 via-purple-800 to-indigo-900 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            🔧 Service & Repairs
+          </h2>
+          <p className="text-xl md:text-2xl text-purple-200 mb-8">
+            Find trusted auto repair shops and schedule service
+          </p>
+        </div>
+      </section>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Service Booking Section */}
+        <div className="mb-12">
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">📅 Schedule Service</h3>
+            
+            <div className="grid md:grid-cols-3 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Vehicle Make</label>
+                <select
+                  value={bookingForm.vehicle_make}
+                  onChange={(e) => setBookingForm({...bookingForm, vehicle_make: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                >
+                  <option value="">Select Make</option>
+                  <option value="Ford">Ford</option>
+                  <option value="Toyota">Toyota</option>
+                  <option value="Honda">Honda</option>
+                  <option value="Chevrolet">Chevrolet</option>
+                  <option value="BMW">BMW</option>
+                  <option value="Mercedes-Benz">Mercedes-Benz</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Vehicle Model</label>
+                <input
+                  type="text"
+                  value={bookingForm.vehicle_model}
+                  onChange={(e) => setBookingForm({...bookingForm, vehicle_model: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="e.g., F-150, Camry"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
+                <select
+                  value={selectedService}
+                  onChange={(e) => {
+                    setSelectedService(e.target.value);
+                    setBookingForm({...bookingForm, service_type: e.target.value});
+                  }}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                >
+                  <option value="">Select Service</option>
+                  {serviceTypes.map(service => (
+                    <option key={service} value={service}>{service}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex space-x-4">
+              <button
+                onClick={getEstimate}
+                disabled={!selectedService || !bookingForm.vehicle_make || !bookingForm.vehicle_model}
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              >
+                Get Price Estimate
+              </button>
+              
+              <button
+                onClick={() => setShowBookingForm(true)}
+                disabled={!selectedService}
+                className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all disabled:opacity-50"
+              >
+                Book Service
+              </button>
+            </div>
+
+            {/* Price Estimate */}
+            {estimate && (
+              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <h4 className="font-semibold text-green-900 mb-2">💰 Price Estimate for {estimate.vehicle}</h4>
+                <div className="grid grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <span className="text-green-700">Low: </span>
+                    <span className="font-semibold">${estimate.min_cost}</span>
+                  </div>
+                  <div>
+                    <span className="text-green-700">Average: </span>
+                    <span className="font-semibold">${estimate.average_cost}</span>
+                  </div>
+                  <div>
+                    <span className="text-green-700">High: </span>
+                    <span className="font-semibold">${estimate.max_cost}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-green-600 mt-2">{estimate.note}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Repair Shops Directory */}
+        <div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-6">🏪 Trusted Repair Shops</h3>
+          
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+              <p className="mt-2 text-gray-600">Loading repair shops...</p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {repairShops.map((shop) => (
+                <div key={shop.id} className="bg-white rounded-lg shadow border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="text-lg font-semibold text-gray-900">{shop.name}</h4>
+                    <div className="flex items-center bg-yellow-50 px-2 py-1 rounded">
+                      <span className="text-yellow-600">⭐</span>
+                      <span className="text-sm font-medium text-yellow-800 ml-1">{shop.rating}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 text-sm text-gray-600 mb-4">
+                    <div className="flex items-start">
+                      <span className="text-purple-600 mr-2">📍</span>
+                      <span>{shop.address}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-purple-600 mr-2">📞</span>
+                      <span>{shop.phone}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-purple-600 mr-2">🕒</span>
+                      <span>{shop.hours}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-purple-600 mr-2">📏</span>
+                      <span className="font-medium text-purple-600">{shop.distance}</span>
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <h5 className="text-sm font-medium text-gray-700 mb-2">Services Offered:</h5>
+                    <div className="flex flex-wrap gap-1">
+                      {shop.services.slice(0, 3).map((service) => (
+                        <span key={service} className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">
+                          {service}
+                        </span>
+                      ))}
+                      {shop.services.length > 3 && (
+                        <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
+                          +{shop.services.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setBookingForm({...bookingForm, preferred_shop: shop.name});
+                      setShowBookingForm(true);
+                    }}
+                    className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all text-sm font-medium"
+                  >
+                    Select This Shop
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Booking Form Modal */}
+      {showBookingForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl max-w-md w-full p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">📅 Book Service Appointment</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+                <input
+                  type="text"
+                  value={bookingForm.customer_name}
+                  onChange={(e) => setBookingForm({...bookingForm, customer_name: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  placeholder="Full name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                <input
+                  type="tel"
+                  value={bookingForm.customer_phone}
+                  onChange={(e) => setBookingForm({...bookingForm, customer_phone: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  placeholder="(555) 123-4567"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Date & Time</label>
+                <input
+                  type="datetime-local"
+                  value={bookingForm.scheduled_date}
+                  onChange={(e) => setBookingForm({...bookingForm, scheduled_date: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                />
+              </div>
+
+              <div className="bg-gray-50 p-3 rounded-lg text-sm">
+                <p><strong>Service:</strong> {selectedService}</p>
+                <p><strong>Vehicle:</strong> {bookingForm.vehicle_make} {bookingForm.vehicle_model}</p>
+                <p><strong>Shop:</strong> {bookingForm.preferred_shop}</p>
+              </div>
+            </div>
+
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={handleBookService}
+                disabled={!bookingForm.customer_name || !bookingForm.customer_phone || !bookingForm.scheduled_date}
+                className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all disabled:opacity-50"
+              >
+                Confirm Booking
+              </button>
+              <button
+                onClick={() => setShowBookingForm(false)}
+                className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 // Admin Portal with Complete CRM System
 const AdminPortal = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
