@@ -39,8 +39,8 @@ const InterfaceSelector = () => {
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           {interfaces.map((interfaceItem) => (
             <Link
-              key={interface.path}
-              to={interface.path}
+              key={interfaceItem.path}
+              to={interfaceItem.path}
               className="group block"
             >
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 text-center transform transition-all duration-300 hover:scale-105 hover:bg-white/20 border border-white/20">
