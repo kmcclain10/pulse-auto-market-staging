@@ -324,9 +324,9 @@ frontend:
 
   - task: "Dealer Portal - Inventory Dashboard"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/src/App.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -339,6 +339,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "Verified that the dealer portal shows the inventory dashboard with statistics cards (Total Inventory: 127, Active Leads: 23, Deals in Progress: 8, Monthly Revenue: $47K). The inventory manager shows vehicle listings with proper details and actions."
+      - working: false
+        agent: "testing"
+        comment: "Additional testing shows that while the dealer dashboard displays statistics correctly (Total Inventory: 127, Active Leads: 23, Deals in Progress: 8, Monthly Revenue: $47K), when clicking on the Inventory Manager, no actual vehicles are displayed - only a loading spinner that never resolves. There appears to be a disconnect between the dashboard stats and the actual inventory display."
 
   - task: "Admin Dashboard - Stats Display"
     implemented: true
