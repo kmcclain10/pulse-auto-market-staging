@@ -227,15 +227,18 @@ backend:
 
   - task: "Admin Interface APIs - Create Scraping Job"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test POST /api/admin/scraping-jobs endpoint"
+      - working: true
+        agent: "testing"
+        comment: "Create scraping job endpoint is working correctly. Successfully created a job with custom filters and verified it was added to the jobs list."
 
   - task: "Market Check API - Pricing"
     implemented: true
