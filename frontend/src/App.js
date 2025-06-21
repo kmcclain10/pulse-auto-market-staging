@@ -292,54 +292,110 @@ const DealerPricing = () => {
   );
 };
 
-// Dealer Portal with Sidebar
+// Dealer Portal with Enhanced Sidebar
 const DealerPortal = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   const sidebarItems = [
-    { id: 'dashboard', name: 'Dashboard', icon: '📊' },
-    { id: 'inventory', name: 'Inventory', icon: '🚗' },
-    { id: 'crm', name: 'AI CRM', icon: '🤖' },
-    { id: 'desking', name: 'Desking Tool', icon: '💰' },
-    { id: 'leads', name: 'Leads', icon: '📈' },
-    { id: 'subscription', name: 'Subscription', icon: '💳' },
-    { id: 'settings', name: 'Settings', icon: '⚙️' }
+    { id: 'dashboard', name: 'Dashboard', icon: '📊', category: 'main' },
+    { id: 'inventory', name: 'Inventory Manager', icon: '🚗', category: 'inventory' },
+    { id: 'add-vehicle', name: 'Add Vehicle', icon: '➕', category: 'inventory' },
+    { id: 'photos', name: 'Photo Manager', icon: '📸', category: 'inventory' },
+    { id: 'pricing', name: 'Pricing Tools', icon: '💲', category: 'inventory' },
+    { id: 'crm', name: 'Customer CRM', icon: '👥', category: 'sales' },
+    { id: 'leads', name: 'Lead Management', icon: '📈', category: 'sales' },
+    { id: 'desking', name: 'Desking Tool', icon: '🧮', category: 'sales' },
+    { id: 'follow-up', name: 'Follow-Up Center', icon: '🔄', category: 'sales' },
+    { id: 'calendar', name: 'Appointments', icon: '📅', category: 'sales' },
+    { id: 'reports', name: 'Sales Reports', icon: '📊', category: 'analytics' },
+    { id: 'analytics', name: 'Performance Analytics', icon: '📈', category: 'analytics' },
+    { id: 'marketing', name: 'Marketing Tools', icon: '📢', category: 'marketing' },
+    { id: 'website', name: 'Website Builder', icon: '🌐', category: 'marketing' },
+    { id: 'social', name: 'Social Media', icon: '📱', category: 'marketing' },
+    { id: 'finance', name: 'Finance Partners', icon: '🏦', category: 'tools' },
+    { id: 'trade-in', name: 'Trade-In Tools', icon: '🔄', category: 'tools' },
+    { id: 'warranty', name: 'Warranty Center', icon: '🛡️', category: 'tools' },
+    { id: 'subscription', name: 'Subscription', icon: '💳', category: 'account' },
+    { id: 'settings', name: 'Dealership Settings', icon: '⚙️', category: 'account' },
+    { id: 'users', name: 'User Management', icon: '👤', category: 'account' },
+    { id: 'support', name: 'Help & Support', icon: '❓', category: 'account' }
   ];
+
+  const categories = {
+    main: 'Overview',
+    inventory: 'Inventory Management',
+    sales: 'Sales & CRM',
+    analytics: 'Analytics & Reports',
+    marketing: 'Marketing & Website',
+    tools: 'Business Tools',
+    account: 'Account & Settings'
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg">
-        <div className="p-6 border-b">
-          <h2 className="text-xl font-bold text-gray-800">Dealer Portal</h2>
-          <p className="text-sm text-gray-600">Welcome back, John's Auto</p>
+      {/* Enhanced Sidebar */}
+      <div className="w-80 bg-white shadow-xl">
+        <div className="p-6 border-b bg-gradient-to-r from-purple-600 to-purple-700 text-white">
+          <h2 className="text-xl font-bold">Dealer Portal</h2>
+          <p className="text-purple-200">Welcome back, John's Auto</p>
+          <div className="mt-2 text-sm">
+            <span className="bg-purple-500 px-2 py-1 rounded text-xs">Professional Plan</span>
+          </div>
         </div>
         
-        <nav className="mt-6">
-          {sidebarItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center px-6 py-3 text-left hover:bg-blue-50 transition-colors ${
-                activeTab === item.id ? 'bg-blue-50 border-r-4 border-blue-600 text-blue-600' : 'text-gray-700'
-              }`}
-            >
-              <span className="text-xl mr-3">{item.icon}</span>
-              {item.name}
-            </button>
+        <nav className="overflow-y-auto h-full pb-20">
+          {Object.entries(categories).map(([categoryKey, categoryName]) => (
+            <div key={categoryKey} className="mb-2">
+              <div className="px-6 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                {categoryName}
+              </div>
+              {sidebarItems
+                .filter(item => item.category === categoryKey)
+                .map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`w-full flex items-center px-6 py-3 text-left hover:bg-purple-50 transition-colors text-sm ${
+                      activeTab === item.id 
+                        ? 'bg-purple-50 border-r-4 border-purple-600 text-purple-600 font-medium' 
+                        : 'text-gray-700 hover:text-purple-600'
+                    }`}
+                  >
+                    <span className="text-lg mr-3">{item.icon}</span>
+                    {item.name}
+                  </button>
+                ))}
+            </div>
           ))}
         </nav>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
-        {activeTab === 'dashboard' && <DashboardContent />}
-        {activeTab === 'inventory' && <InventoryContent />}
-        {activeTab === 'crm' && <CRMContent />}
-        {activeTab === 'desking' && <DeskingContent />}
-        {activeTab === 'leads' && <LeadsContent />}
-        {activeTab === 'subscription' && <SubscriptionContent />}
-        {activeTab === 'settings' && <SettingsContent />}
+      <div className="flex-1 overflow-auto">
+        <div className="p-8">
+          {activeTab === 'dashboard' && <DashboardContent />}
+          {activeTab === 'inventory' && <InventoryManagerContent />}
+          {activeTab === 'add-vehicle' && <AddVehicleContent />}
+          {activeTab === 'photos' && <PhotoManagerContent />}
+          {activeTab === 'pricing' && <PricingToolsContent />}
+          {activeTab === 'crm' && <CRMContent />}
+          {activeTab === 'leads' && <LeadsContent />}
+          {activeTab === 'desking' && <DeskingContent />}
+          {activeTab === 'follow-up' && <FollowUpContent />}
+          {activeTab === 'calendar' && <CalendarContent />}
+          {activeTab === 'reports' && <ReportsContent />}
+          {activeTab === 'analytics' && <AnalyticsContent />}
+          {activeTab === 'marketing' && <MarketingContent />}
+          {activeTab === 'website' && <WebsiteBuilderContent />}
+          {activeTab === 'social' && <SocialMediaContent />}
+          {activeTab === 'finance' && <FinancePartnersContent />}
+          {activeTab === 'trade-in' && <TradeInToolsContent />}
+          {activeTab === 'warranty' && <WarrantyContent />}
+          {activeTab === 'subscription' && <SubscriptionContent />}
+          {activeTab === 'settings' && <SettingsContent />}
+          {activeTab === 'users' && <UserManagementContent />}
+          {activeTab === 'support' && <SupportContent />}
+        </div>
       </div>
     </div>
   );
