@@ -671,6 +671,63 @@ async def delete_vehicle(vehicle_id: str):
     return {"message": "Vehicle deleted successfully"}
 
 # Admin Interface Routes
+@admin_router.post("/scrape-dealers")
+async def trigger_dealer_scraping(background_tasks: BackgroundTasks):
+    """Trigger scraping of all 50 dealer websites"""
+    import subprocess
+    
+    try:
+        # Run the dealer scraper in background
+        subprocess.Popen(
+            ["python", "/app/dealer_scraper.py"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        
+        return {
+            "message": "Multi-dealer scraping started",
+            "dealers_count": 50,
+            "estimated_time": "10-15 minutes",
+            "status": "running"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to start scraping: {str(e)}")
+
+@admin_router.get("/scrape-status")
+async def get_scrape_status():
+    """Get status of ongoing scraping"""
+    try:
+        # Check if scraper is running
+        import subprocess
+        result = subprocess.run(["pgrep", "-f", "dealer_scraper.py"], capture_output=True)
+        is_running = len(result.stdout) > 0
+        
+        # Read log file for progress
+        log_content = ""
+        try:
+            with open("/app/scraper.log", "r") as f:
+                log_lines = f.readlines()
+                log_content = "".join(log_lines[-20:])  # Last 20 lines
+        except:
+            log_content = "No log file found"
+        
+        # Count current vehicles in database
+        vehicle_count = await db.vehicles.count_documents({})
+        
+        return {
+            "is_running": is_running,
+            "current_vehicles": vehicle_count,
+            "log_output": log_content,
+            "target_dealers": 50
+        }
+    except Exception as e:
+        return {
+            "is_running": False,
+            "current_vehicles": 0,
+            "log_output": f"Error: {str(e)}",
+            "target_dealers": 50
+        }
+
 @admin_router.post("/scraping-jobs", response_model=ScrapingJob)
 async def create_scraping_job(
     background_tasks: BackgroundTasks,
