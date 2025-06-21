@@ -363,15 +363,18 @@ frontend:
 
   - task: "Navigation Between Interfaces"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test navigation between all interfaces and back to interface selector."
+      - working: true
+        agent: "testing"
+        comment: "Navigation between interfaces works smoothly. Successfully tested navigation from interface selector to all three portals and back to the interface selector using the back button in the navigation bar."
 
   - task: "System Status Component"
     implemented: true
