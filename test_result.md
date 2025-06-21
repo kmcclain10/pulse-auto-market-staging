@@ -182,15 +182,18 @@ backend:
 
   - task: "Customer Interface APIs - Vehicle Details"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test GET /api/customer/vehicles/{vehicle_id} endpoint"
+      - working: true
+        agent: "testing"
+        comment: "Vehicle details endpoint is working correctly. It returns the correct vehicle data when queried with a specific vehicle ID."
 
   - task: "Admin Interface APIs - Stats"
     implemented: true
