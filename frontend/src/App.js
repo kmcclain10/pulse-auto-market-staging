@@ -87,8 +87,8 @@ const Header = () => {
 const DealerAuth = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: 'demo@dealer.com',
+    password: 'demo123',
     dealerName: '',
     phone: '',
     website: ''
@@ -97,9 +97,15 @@ const DealerAuth = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isSignIn) {
-      // For demo, navigate to dealer portal
+    
+    // Demo credentials for easy testing
+    if (isSignIn && formData.email === 'demo@dealer.com' && formData.password === 'demo123') {
       navigate('/dealer-portal');
+      return;
+    }
+    
+    if (isSignIn) {
+      alert('Demo Login: email: demo@dealer.com, password: demo123');
     } else {
       // Sign up - create lead and send to pricing
       navigate('/dealer-pricing');
@@ -115,6 +121,15 @@ const DealerAuth = () => {
         <p className="mt-2 text-center text-sm text-gray-600">
           {isSignIn ? 'Access your dealer portal' : 'Start selling more cars today'}
         </p>
+        
+        {/* Demo Credentials Display */}
+        {isSignIn && (
+          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md text-center">
+            <p className="text-sm text-blue-800 font-medium">Demo Login:</p>
+            <p className="text-sm text-blue-600">Email: demo@dealer.com</p>
+            <p className="text-sm text-blue-600">Password: demo123</p>
+          </div>
+        )}
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
