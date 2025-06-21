@@ -212,15 +212,18 @@ backend:
 
   - task: "Admin Interface APIs - Scraping Jobs Listing"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test GET /api/admin/scraping-jobs endpoint"
+      - working: true
+        agent: "testing"
+        comment: "Scraping jobs listing endpoint is working correctly. Initially returns an empty array as expected."
 
   - task: "Admin Interface APIs - Create Scraping Job"
     implemented: true
