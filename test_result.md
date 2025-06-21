@@ -152,15 +152,18 @@ backend:
 
   - task: "Customer Interface APIs - Makes Listing"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test GET /api/customer/makes endpoint"
+      - working: true
+        agent: "testing"
+        comment: "Makes endpoint is working correctly. It returns all 8 makes (BMW, Chevrolet, Ford, Honda, Jeep, Mercedes-Benz, Tesla, Toyota) as expected."
 
   - task: "Customer Interface APIs - Models by Make"
     implemented: true
