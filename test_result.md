@@ -348,15 +348,18 @@ frontend:
 
   - task: "Admin Dashboard - Scraping Controls"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test scraping job controls and job table display."
+      - working: true
+        agent: "testing"
+        comment: "Scraping controls are present and functional with a 'Start AutoTrader Scraping' button. The scraping jobs table is properly structured with 4 columns (Source, Status, Vehicles Found, Created). The table shows a completed job with 0 vehicles found."
 
   - task: "Navigation Between Interfaces"
     implemented: true
