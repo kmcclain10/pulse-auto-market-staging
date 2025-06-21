@@ -197,15 +197,18 @@ backend:
 
   - task: "Admin Interface APIs - Stats"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test GET /api/admin/stats endpoint"
+      - working: true
+        agent: "testing"
+        comment: "Admin stats endpoint is working correctly. It returns the expected data structure with 8 vehicles and 8 dealers as required."
 
   - task: "Admin Interface APIs - Scraping Jobs Listing"
     implemented: true
