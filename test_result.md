@@ -167,15 +167,18 @@ backend:
 
   - task: "Customer Interface APIs - Models by Make"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test GET /api/customer/models/{make} endpoint"
+      - working: true
+        agent: "testing"
+        comment: "Models by make endpoint is working correctly. Tested with Ford and Toyota makes, both returning the expected models (F-150 for Ford and Camry for Toyota)."
 
   - task: "Customer Interface APIs - Vehicle Details"
     implemented: true
