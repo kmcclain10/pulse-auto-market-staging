@@ -813,14 +813,15 @@ const HomePage = () => {
 // Other page components (simplified for now)
 const InventoryPage = () => <div className="min-h-screen bg-gray-50 py-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h1 className="text-3xl font-bold text-gray-900 mb-6">Complete Inventory</h1></div></div>;
 const ServicePage = () => <div className="min-h-screen bg-gray-50 py-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h1 className="text-3xl font-bold text-gray-900 mb-6">Service & Repairs</h1></div></div>;
-// Admin Portal with Real-time Scraper Status
+// Admin Portal with Complete CRM System
 const AdminPortal = () => {
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [scrapeStatus, setScrapeStatus] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     checkScrapeStatus();
-    const interval = setInterval(checkScrapeStatus, 5000); // Check every 5 seconds
+    const interval = setInterval(checkScrapeStatus, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -833,145 +834,130 @@ const AdminPortal = () => {
     }
   };
 
-  const startDealerScraping = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post(`${API}/admin/scrape-dealers`);
-      alert(`Started scraping 50 dealers! ETA: ${response.data.estimated_time}`);
-      checkScrapeStatus();
-    } catch (error) {
-      alert('Failed to start scraping');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const sidebarItems = [
+    { id: 'dashboard', name: 'Dashboard', icon: '📊' },
+    { id: 'dealers', name: 'Dealer Management', icon: '🏢' },
+    { id: 'crm', name: 'CRM System', icon: '🤖' },
+    { id: 'billing', name: 'Billing & Revenue', icon: '💰' },
+    { id: 'reports', name: 'Analytics & Reports', icon: '📈' },
+    { id: 'scraper', name: 'Data Scraping', icon: '🔍' },
+    { id: 'settings', name: 'System Settings', icon: '⚙️' }
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
+    <div className="min-h-screen bg-gray-100 flex">
+      {/* Admin Sidebar */}
+      <div className="w-64 bg-white shadow-lg">
+        <div className="p-6 border-b">
+          <h2 className="text-xl font-bold text-gray-800">Admin Control</h2>
+          <p className="text-sm text-gray-600">Pulse Auto Market</p>
+        </div>
         
-        {/* Scraper Control Panel */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Multi-Dealer Scraper</h2>
-            <div className="flex items-center space-x-3">
-              {scrapeStatus?.is_running ? (
-                <span className="flex items-center text-green-600">
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse mr-2"></div>
-                  Scraping in Progress
-                </span>
-              ) : (
-                <span className="flex items-center text-gray-500">
-                  <div className="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
-                  Idle
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold text-blue-800">Target Dealers</h3>
-              <p className="text-3xl font-bold text-blue-600">50</p>
-              <p className="text-sm text-blue-600">Across 5 states</p>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold text-green-800">Current Inventory</h3>
-              <p className="text-3xl font-bold text-green-600">{scrapeStatus?.current_vehicles || 0}</p>
-              <p className="text-sm text-green-600">Vehicles in database</p>
-            </div>
-            <div className="bg-purple-50 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold text-purple-800">Status</h3>
-              <p className="text-lg font-bold text-purple-600">
-                {scrapeStatus?.is_running ? 'Active' : 'Ready'}
-              </p>
-              <p className="text-sm text-purple-600">
-                {scrapeStatus?.is_running ? 'Scraping websites...' : 'Ready to scrape'}
-              </p>
-            </div>
-          </div>
-
-          {/* Control Button */}
-          <div className="mb-6">
+        <nav className="mt-6">
+          {sidebarItems.map((item) => (
             <button
-              onClick={startDealerScraping}
-              disabled={loading || scrapeStatus?.is_running}
-              className={`px-6 py-3 rounded-lg font-medium ${
-                loading || scrapeStatus?.is_running
-                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`w-full flex items-center px-6 py-3 text-left hover:bg-blue-50 transition-colors ${
+                activeTab === item.id ? 'bg-blue-50 border-r-4 border-blue-600 text-blue-600' : 'text-gray-700'
               }`}
             >
-              {loading ? 'Starting...' : scrapeStatus?.is_running ? 'Scraping in Progress...' : 'Start Multi-Dealer Scraping'}
+              <span className="text-xl mr-3">{item.icon}</span>
+              {item.name}
             </button>
-          </div>
+          ))}
+        </nav>
+      </div>
 
-          {/* Live Log Output */}
-          {scrapeStatus?.log_output && (
-            <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm max-h-64 overflow-y-auto">
-              <h4 className="text-white font-bold mb-2">Live Scraper Output:</h4>
-              <pre className="whitespace-pre-wrap">{scrapeStatus.log_output}</pre>
+      {/* Main Content */}
+      <div className="flex-1 p-8">
+        {activeTab === 'dashboard' && <AdminDashboard scrapeStatus={scrapeStatus} />}
+        {activeTab === 'dealers' && <DealerManagement />}
+        {activeTab === 'crm' && <AdminCRM />}
+        {activeTab === 'billing' && <AdminBilling />}
+        {activeTab === 'reports' && <AdminReports />}
+        {activeTab === 'scraper' && <AdminScraper scrapeStatus={scrapeStatus} />}
+        {activeTab === 'settings' && <AdminSettings />}
+      </div>
+    </div>
+  );
+};
+
+// Admin Dashboard
+const AdminDashboard = ({ scrapeStatus }) => {
+  const [stats, setStats] = useState({
+    totalVehicles: 35,
+    totalDealers: 8,
+    activeSubscriptions: 5,
+    monthlyRevenue: 2450,
+    totalLeads: 127,
+    hotLeads: 23
+  });
+
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
+      
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Total Vehicles</h3>
+          <p className="text-3xl font-bold text-blue-600">{stats.totalVehicles}</p>
+          <p className="text-sm text-green-600">+12 this week</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Active Dealers</h3>
+          <p className="text-3xl font-bold text-green-600">{stats.totalDealers}</p>
+          <p className="text-sm text-green-600">+2 this month</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Subscriptions</h3>
+          <p className="text-3xl font-bold text-purple-600">{stats.activeSubscriptions}</p>
+          <p className="text-sm text-purple-600">$2,450 MRR</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Hot Leads</h3>
+          <p className="text-3xl font-bold text-orange-600">{stats.hotLeads}</p>
+          <p className="text-sm text-orange-600">23% conversion</p>
+        </div>
+      </div>
+
+      {/* System Status */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-4">System Status</h3>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span>Scraper Engine</span>
+              <span className={`px-2 py-1 rounded text-sm ${scrapeStatus?.is_running ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                {scrapeStatus?.is_running ? 'Running' : 'Idle'}
+              </span>
             </div>
-          )}
+            <div className="flex justify-between items-center">
+              <span>CRM System</span>
+              <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">Active</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>Billing System</span>
+              <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">Processing</span>
+            </div>
+          </div>
         </div>
 
-        {/* Dealer List */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Target Dealers by State</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div>
-              <h3 className="font-bold text-gray-700 mb-2">Georgia (10)</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Atlanta Auto Max</li>
-                <li>• Motor Max</li>
-                <li>• Atlanta Used Cars</li>
-                <li>• Gravity Autos Roswell</li>
-                <li>• Select Luxury Motors</li>
-                <li>• + 5 more dealers</li>
-              </ul>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
+          <div className="space-y-3 text-sm">
+            <div className="flex justify-between">
+              <span>New dealer signup</span>
+              <span className="text-gray-500">2 hours ago</span>
             </div>
-            <div>
-              <h3 className="font-bold text-gray-700 mb-2">Tennessee (10)</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• City Auto Sales</li>
-                <li>• Auto Universe</li>
-                <li>• Dixie Motors</li>
-                <li>• East Tennessee Auto Outlet</li>
-                <li>• Budget Auto Sales</li>
-                <li>• + 5 more dealers</li>
-              </ul>
+            <div className="flex justify-between">
+              <span>Scraper found 12 vehicles</span>
+              <span className="text-gray-500">4 hours ago</span>
             </div>
-            <div>
-              <h3 className="font-bold text-gray-700 mb-2">Alabama (10)</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Birmingham Auto Auction</li>
-                <li>• Serra Used Cars</li>
-                <li>• Auto Mart</li>
-                <li>• Highline Imports</li>
-                <li>• + 6 more dealers</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-gray-700 mb-2">Florida (10)</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Off Lease Only</li>
-                <li>• Tropical Auto Sales</li>
-                <li>• Auto Buying Center</li>
-                <li>• Miami Imports</li>
-                <li>• + 6 more dealers</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-gray-700 mb-2">Kentucky (10)</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Auto Max of Louisville</li>
-                <li>• Louisville Auto Center</li>
-                <li>• Prime Auto Sales</li>
-                <li>• Bluegrass Auto Sales</li>
-                <li>• + 6 more dealers</li>
-              </ul>
+            <div className="flex justify-between">
+              <span>Payment processed: $199</span>
+              <span className="text-gray-500">6 hours ago</span>
             </div>
           </div>
         </div>
@@ -979,6 +965,235 @@ const AdminPortal = () => {
     </div>
   );
 };
+
+// Dealer Management
+const DealerManagement = () => {
+  const dealers = [
+    { id: 1, name: "Atlanta Auto Max", status: "Active", subscription: "Professional", revenue: "$199/mo", vehicles: 45 },
+    { id: 2, name: "Serra Used Cars", status: "Active", subscription: "Starter", revenue: "$99/mo", vehicles: 23 },
+    { id: 3, name: "Motor Max", status: "Trial", subscription: "Professional", revenue: "$0", vehicles: 12 },
+    { id: 4, name: "Elite Motors", status: "Active", subscription: "Enterprise", revenue: "$399/mo", vehicles: 78 },
+  ];
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Dealer Management</h1>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Add New Dealer
+        </button>
+      </div>
+
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dealer Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Subscription</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Revenue</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vehicles</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {dealers.map((dealer) => (
+              <tr key={dealer.id}>
+                <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{dealer.name}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`px-2 py-1 text-xs rounded-full ${
+                    dealer.status === 'Active' ? 'bg-green-100 text-green-800' :
+                    dealer.status === 'Trial' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {dealer.status}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-600">{dealer.subscription}</td>
+                <td className="px-6 py-4 whitespace-nowrap font-semibold text-green-600">{dealer.revenue}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-600">{dealer.vehicles}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <button className="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                  <button className="text-red-600 hover:text-red-900">Suspend</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// Admin CRM System
+const AdminCRM = () => {
+  const leads = [
+    { id: 1, customer: "John Smith", dealer: "Atlanta Auto Max", vehicle: "2022 Ford F-150", score: "Hot", status: "New", value: "$35,999" },
+    { id: 2, customer: "Sarah Johnson", dealer: "Serra Used Cars", vehicle: "2021 Toyota Camry", score: "Warm", status: "Contacted", value: "$26,999" },
+    { id: 3, customer: "Mike Davis", dealer: "Motor Max", vehicle: "2023 Honda Civic", score: "Hot", status: "Qualified", value: "$24,599" },
+    { id: 4, customer: "Lisa Wilson", dealer: "Elite Motors", vehicle: "2022 BMW X3", score: "Cold", status: "Follow-up", value: "$42,999" }
+  ];
+
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">CRM System</h1>
+      
+      {/* CRM Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Total Leads</h3>
+          <p className="text-3xl font-bold text-blue-600">127</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Hot Leads</h3>
+          <p className="text-3xl font-bold text-red-600">23</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Conversion Rate</h3>
+          <p className="text-3xl font-bold text-green-600">18%</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">AI Responses</h3>
+          <p className="text-3xl font-bold text-purple-600">1,234</p>
+        </div>
+      </div>
+
+      {/* Recent Leads */}
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="px-6 py-4 border-b">
+          <h3 className="text-lg font-semibold">Recent Leads</h3>
+        </div>
+        <table className="w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dealer</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vehicle</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Value</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {leads.map((lead) => (
+              <tr key={lead.id}>
+                <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{lead.customer}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-600">{lead.dealer}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-600">{lead.vehicle}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`px-2 py-1 text-xs rounded-full ${
+                    lead.score === 'Hot' ? 'bg-red-100 text-red-800' :
+                    lead.score === 'Warm' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-blue-100 text-blue-800'
+                  }`}>
+                    {lead.score}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-600">{lead.status}</td>
+                <td className="px-6 py-4 whitespace-nowrap font-semibold text-green-600">{lead.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// Admin Billing
+const AdminBilling = () => {
+  const revenue = [
+    { month: "January", amount: 2150, dealers: 6 },
+    { month: "February", amount: 2450, dealers: 7 },
+    { month: "March", amount: 2850, dealers: 8 },
+  ];
+
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">Billing & Revenue</h1>
+      
+      {/* Revenue Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Monthly Revenue</h3>
+          <p className="text-3xl font-bold text-green-600">$2,850</p>
+          <p className="text-sm text-green-600">+16% from last month</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Annual Run Rate</h3>
+          <p className="text-3xl font-bold text-blue-600">$34,200</p>
+          <p className="text-sm text-blue-600">Growing steadily</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-700">Avg Revenue/Dealer</h3>
+          <p className="text-3xl font-bold text-purple-600">$356</p>
+          <p className="text-sm text-purple-600">Per month</p>
+        </div>
+      </div>
+
+      {/* Revenue Breakdown */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-semibold mb-4">Revenue by Plan</h3>
+        <div className="space-y-4">
+          <div className="flex justify-between items-center p-4 bg-gray-50 rounded">
+            <span className="font-medium">Starter ($99/mo)</span>
+            <span className="text-green-600 font-semibold">$297 (3 dealers)</span>
+          </div>
+          <div className="flex justify-between items-center p-4 bg-gray-50 rounded">
+            <span className="font-medium">Professional ($199/mo)</span>
+            <span className="text-green-600 font-semibold">$1,194 (6 dealers)</span>
+          </div>
+          <div className="flex justify-between items-center p-4 bg-gray-50 rounded">
+            <span className="font-medium">Enterprise ($399/mo)</span>
+            <span className="text-green-600 font-semibold">$1,197 (3 dealers)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Admin Reports
+const AdminReports = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Analytics & Reports</h1>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="bg-white p-6 rounded-lg shadow">
+        <h3 className="text-lg font-semibold mb-4">Platform Growth</h3>
+        <p className="text-gray-600">Interactive charts and growth metrics would go here.</p>
+      </div>
+      <div className="bg-white p-6 rounded-lg shadow">
+        <h3 className="text-lg font-semibold mb-4">Dealer Performance</h3>
+        <p className="text-gray-600">Individual dealer performance analytics.</p>
+      </div>
+    </div>
+  </div>
+);
+
+// Admin Scraper (existing functionality)
+const AdminScraper = ({ scrapeStatus }) => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Data Scraping Control</h1>
+    <div className="bg-white p-6 rounded-lg shadow">
+      <h3 className="text-lg font-semibold mb-4">Scraper Status</h3>
+      <p className="text-gray-600">
+        Status: {scrapeStatus?.is_running ? 'Running' : 'Idle'} | 
+        Vehicles: {scrapeStatus?.current_vehicles || 0}
+      </p>
+    </div>
+  </div>
+);
+
+// Admin Settings
+const AdminSettings = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">System Settings</h1>
+    <div className="bg-white p-6 rounded-lg shadow">
+      <h3 className="text-lg font-semibold mb-4">Platform Configuration</h3>
+      <p className="text-gray-600">System settings and configuration options.</p>
+    </div>
+  </div>
+);
 
 // Main App Component
 function App() {
