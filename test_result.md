@@ -242,15 +242,18 @@ backend:
 
   - task: "Market Check API - Pricing"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test POST /api/market-check/pricing endpoint with API key validation"
+      - working: true
+        agent: "testing"
+        comment: "Market check pricing endpoint is working correctly. It returns the expected data structure and properly validates API keys, rejecting invalid keys with a 401 status code."
 
   - task: "Database Verification"
     implemented: true
