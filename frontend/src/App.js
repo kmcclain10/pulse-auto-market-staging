@@ -1380,7 +1380,7 @@ const HomePage = () => {
   const loadFeaturedVehicles = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API}/vehicles?limit=12`);
+      const response = await axios.get(`${API}/customer/vehicles?limit=12`);
       setVehicles(response.data);
     } catch (error) {
       console.error('Error loading vehicles:', error);
@@ -1401,7 +1401,7 @@ const HomePage = () => {
         if (value) params.append(key, value);
       });
       
-      const response = await axios.get(`${API}/vehicles?${params}&limit=20`);
+      const response = await axios.get(`${API}/customer/vehicles?${params}&limit=20`);
       setVehicles(response.data);
     } catch (error) {
       console.error('Error searching vehicles:', error);
