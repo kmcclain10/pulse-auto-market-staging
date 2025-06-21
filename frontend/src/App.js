@@ -524,7 +524,7 @@ const SettingsContent = () => (
 );
 
 // Vehicle Card Component (Enhanced)
-const VehicleCard = ({ vehicle }) => {
+const VehicleCard = ({ vehicle, onViewDetails }) => {
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -548,17 +548,16 @@ const VehicleCard = ({ vehicle }) => {
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
             className="w-full h-full object-cover"
             onError={(e) => {
-              // Hide broken real images, don't use stock photos
               e.target.style.display = 'none';
             }}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
             <div className="text-center p-4">
-              <div className="text-2xl font-bold text-blue-600 mb-2">
+              <div className="text-2xl font-bold text-purple-600 mb-2">
                 {vehicle.year} {vehicle.make}
               </div>
-              <div className="text-lg text-blue-500">{vehicle.model}</div>
+              <div className="text-lg text-purple-500">{vehicle.model}</div>
               <div className="text-sm text-gray-500 mt-2">Real photo loading...</div>
             </div>
           </div>
@@ -566,8 +565,15 @@ const VehicleCard = ({ vehicle }) => {
         
         {/* Deal Badge */}
         {vehicle.deal_pulse_rating === "Great Deal" && (
-          <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+          <div className="absolute top-4 left-4 bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
             🔥 Great Deal
+          </div>
+        )}
+        
+        {/* Photo Count */}
+        {vehicle.images && vehicle.images.length > 1 && (
+          <div className="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm">
+            📷 {vehicle.images.length}
           </div>
         )}
       </div>
@@ -611,13 +617,260 @@ const VehicleCard = ({ vehicle }) => {
         </div>
 
         <div className="flex space-x-3">
-          <button className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+          <button 
+            onClick={() => onViewDetails && onViewDetails(vehicle)}
+            className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 px-4 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-medium shadow-lg"
+          >
             View Details
           </button>
-          <button className="flex-1 border-2 border-blue-600 text-blue-600 py-3 px-4 rounded-lg hover:bg-blue-50 transition-colors font-medium">
+          <button className="flex-1 border-2 border-purple-600 text-purple-600 py-3 px-4 rounded-lg hover:bg-purple-50 transition-colors font-medium">
             Contact Dealer
           </button>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// Industry-Standard Vehicle Details Page (VDP)
+const VehicleDetailsPage = ({ vehicle, onClose }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showContactForm, setShowContactForm] = useState(false);
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  const formatMileage = (mileage) => {
+    return new Intl.NumberFormat('en-US').format(mileage);
+  };
+
+  const monthlyPayment = vehicle.price ? Math.round((vehicle.price * 0.02)) : 0;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {vehicle.year} {vehicle.make} {vehicle.model} {vehicle.trim}
+            </h1>
+            <p className="text-lg text-gray-600">Stock #{vehicle.stock_number || 'N/A'}</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 text-2xl"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-8 p-6">
+          {/* Left Column - Images */}
+          <div className="space-y-4">
+            {/* Main Image */}
+            <div className="relative h-96 bg-gray-100 rounded-lg overflow-hidden">
+              {vehicle.images && vehicle.images.length > 0 ? (
+                <img
+                  src={vehicle.images[currentImageIndex]}
+                  alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-purple-600 mb-2">
+                      {vehicle.year} {vehicle.make}
+                    </div>
+                    <div className="text-xl text-purple-500">{vehicle.model}</div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Image Navigation */}
+              {vehicle.images && vehicle.images.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setCurrentImageIndex(prev => prev > 0 ? prev - 1 : vehicle.images.length - 1)}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70"
+                  >
+                    ←
+                  </button>
+                  <button
+                    onClick={() => setCurrentImageIndex(prev => prev < vehicle.images.length - 1 ? prev + 1 : 0)}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70"
+                  >
+                    →
+                  </button>
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded">
+                    {currentImageIndex + 1} / {vehicle.images.length}
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Thumbnail Images */}
+            {vehicle.images && vehicle.images.length > 1 && (
+              <div className="grid grid-cols-6 gap-2">
+                {vehicle.images.slice(0, 6).map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`h-16 rounded overflow-hidden border-2 ${
+                      currentImageIndex === index ? 'border-purple-600' : 'border-gray-200'
+                    }`}
+                  >
+                    <img src={image} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Right Column - Details */}
+          <div className="space-y-6">
+            {/* Price and Payment */}
+            <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg">
+              <div className="text-4xl font-bold text-green-600 mb-2">
+                {formatPrice(vehicle.price)}
+              </div>
+              <div className="text-lg text-gray-700">
+                Est. ${monthlyPayment}/mo
+              </div>
+              <div className="text-sm text-gray-500">
+                Based on 60 months at 6.9% APR
+              </div>
+            </div>
+
+            {/* Key Details */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="text-sm text-gray-500">Mileage</div>
+                <div className="text-xl font-semibold">{formatMileage(vehicle.mileage)} mi</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="text-sm text-gray-500">Exterior Color</div>
+                <div className="text-xl font-semibold">{vehicle.exterior_color || 'N/A'}</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="text-sm text-gray-500">Transmission</div>
+                <div className="text-xl font-semibold">{vehicle.transmission || 'N/A'}</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="text-sm text-gray-500">Drivetrain</div>
+                <div className="text-xl font-semibold">{vehicle.drivetrain || 'N/A'}</div>
+              </div>
+            </div>
+
+            {/* Vehicle Description */}
+            {vehicle.description && (
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Description</h3>
+                <p className="text-gray-700">{vehicle.description}</p>
+              </div>
+            )}
+
+            {/* Features */}
+            {vehicle.features && vehicle.features.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Features & Options</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {vehicle.features.map((feature, index) => (
+                    <div key={index} className="flex items-center text-sm text-gray-700">
+                      <span className="text-green-500 mr-2">✓</span>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Dealer Information */}
+            <div className="border-t pt-6">
+              <h3 className="text-lg font-semibold mb-3">Dealer Information</h3>
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <div className="font-semibold text-purple-900">{vehicle.dealer_name}</div>
+                {vehicle.dealer_city && vehicle.dealer_state && (
+                  <div className="text-purple-700">{vehicle.dealer_city}, {vehicle.dealer_state}</div>
+                )}
+                {vehicle.dealer_phone && (
+                  <div className="text-purple-700">{vehicle.dealer_phone}</div>
+                )}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-3">
+              <button
+                onClick={() => setShowContactForm(true)}
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-4 px-6 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-semibold text-lg shadow-lg"
+              >
+                Contact Dealer
+              </button>
+              <div className="grid grid-cols-2 gap-3">
+                <button className="bg-white border-2 border-purple-600 text-purple-600 py-3 px-4 rounded-lg hover:bg-purple-50 transition-colors font-medium">
+                  Schedule Test Drive
+                </button>
+                <button className="bg-white border-2 border-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                  Get Financing
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Form Modal */}
+        {showContactForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-60 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg max-w-md w-full p-6">
+              <h3 className="text-xl font-bold mb-4">Contact {vehicle.dealer_name}</h3>
+              <form className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                />
+                <textarea
+                  placeholder="Message"
+                  rows="4"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  defaultValue={`I'm interested in the ${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                ></textarea>
+                <div className="flex space-x-3">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700"
+                  >
+                    Send Message
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowContactForm(false)}
+                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
