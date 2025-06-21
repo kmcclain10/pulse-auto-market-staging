@@ -318,15 +318,18 @@ frontend:
 
   - task: "Dealer Portal - Inventory Dashboard"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test dealer inventory dashboard with statistics cards and vehicle listing table."
+      - working: true
+        agent: "testing"
+        comment: "Dealer inventory dashboard loads correctly with four statistics cards showing inventory counts (Total Inventory, Active Listings, Pending Sales, Sold). The vehicle listing table is properly structured with 5 columns. Add Vehicle button is present and functional. Currently shows 0 vehicles in inventory as expected for a new dealer account."
 
   - task: "Admin Dashboard - Stats Display"
     implemented: true
