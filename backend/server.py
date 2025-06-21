@@ -986,6 +986,51 @@ async def get_service_history(vehicle_id: str):
     history = await repair_shop_service.get_service_history(vehicle_id)
     return {"service_history": history}
 
+@api_router.get("/repair-shops")
+async def get_repair_shops(city: str = "Nashville", state: str = "TN", service_type: Optional[str] = None):
+    """Get nearby repair shops"""
+    shops = await repair_shop_service.get_nearby_repair_shops(city, state, service_type)
+    return {"repair_shops": shops, "total": len(shops)}
+
+@api_router.get("/service/estimate")
+async def get_service_estimate(service_type: str, vehicle_make: str, vehicle_model: str):
+    """Get service cost estimate"""
+    estimate = await repair_shop_service.get_service_estimates(service_type, vehicle_make, vehicle_model)
+    return estimate
+
+@api_router.post("/service/schedule")
+async def schedule_public_service(
+    vehicle_make: str,
+    vehicle_model: str, 
+    service_type: str,
+    customer_name: str,
+    customer_phone: str,
+    preferred_shop: str,
+    scheduled_date: str
+):
+    """Schedule service for public customers"""
+    service_id = str(uuid.uuid4())
+    service_record = {
+        "id": service_id,
+        "vehicle_info": f"{vehicle_make} {vehicle_model}",
+        "service_type": service_type,
+        "customer_name": customer_name,
+        "customer_phone": customer_phone,
+        "preferred_shop": preferred_shop,
+        "scheduled_date": scheduled_date,
+        "status": "scheduled",
+        "created_at": datetime.utcnow()
+    }
+    
+    await db.public_services.insert_one(service_record)
+    
+    return {
+        "service_id": service_id,
+        "status": "scheduled",
+        "message": f"Service appointment scheduled for {scheduled_date}",
+        "confirmation": f"PULSE{service_id[:8].upper()}"
+    }
+
 # Market Check API Routes (Monetization)
 @api_router.post("/market-check/pricing")
 async def market_check_pricing(
