@@ -486,22 +486,30 @@ const InventoryManagerContent = () => {
   const loadVehicles = async () => {
     setLoading(true);
     try {
-      // Load vehicles from customer endpoint (which shows all active vehicles)
+      // Load vehicles from the correct endpoint - use customer vehicles for dealer inventory view
+      // Since all dealers can see all vehicles in this marketplace
       const response = await axios.get(`${API}/customer/vehicles?limit=50`);
       
-      // Add some performance metrics for demo
-      const vehiclesWithMetrics = response.data.map((vehicle, index) => ({
-        ...vehicle,
-        stock_number: vehicle.stock_number || `STK-${String(index + 1).padStart(3, '0')}`,
-        status: vehicle.status || 'Available',
-        days_on_lot: Math.floor(Math.random() * 45) + 1,
-        views: Math.floor(Math.random() * 500) + 50,
-        leads: Math.floor(Math.random() * 15) + 1
-      }));
-      
-      setVehicles(vehiclesWithMetrics);
+      if (response.data && response.data.length > 0) {
+        // Add some performance metrics for demo
+        const vehiclesWithMetrics = response.data.map((vehicle, index) => ({
+          ...vehicle,
+          stock_number: vehicle.stock_number || `STK-${String(index + 1).padStart(3, '0')}`,
+          status: vehicle.status || 'Available',
+          days_on_lot: Math.floor(Math.random() * 45) + 1,
+          views: Math.floor(Math.random() * 500) + 50,
+          leads: Math.floor(Math.random() * 15) + 1
+        }));
+        
+        setVehicles(vehiclesWithMetrics);
+        console.log('Loaded vehicles:', vehiclesWithMetrics.length);
+      } else {
+        console.log('No vehicles returned from API');
+        setVehicles([]);
+      }
     } catch (error) {
       console.error('Error loading vehicles:', error);
+      console.log('API URL:', `${API}/customer/vehicles?limit=50`);
       // Show some sample data if API fails
       setVehicles([
         {
