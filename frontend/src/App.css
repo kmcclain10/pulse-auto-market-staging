@@ -1,5 +1,81 @@
+/* Mobile-First Responsive CSS */
 .App {
     text-align: center;
+}
+
+/* Enhanced mobile optimization */
+@media (max-width: 768px) {
+    /* Vehicle cards mobile layout */
+    .vehicle-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* VDP mobile optimization */
+    .vdp-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .vdp-image-gallery {
+        height: 250px;
+    }
+    
+    /* Search form mobile */
+    .search-form {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* Dealer portal sidebar mobile */
+    .dealer-sidebar {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.3s ease;
+    }
+    
+    .dealer-sidebar.open {
+        left: 0;
+    }
+    
+    /* Admin dashboard mobile */
+    .admin-stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    
+    /* Text sizing for mobile */
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.25rem;
+    }
+    
+    /* Button padding mobile */
+    .mobile-btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Logo mobile */
+    .logo-mobile {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .logo-mobile h1 {
+        font-size: 1.25rem;
+    }
+    
+    .logo-mobile p {
+        font-size: 0.75rem;
+    }
 }
 
 .App-logo {
