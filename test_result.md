@@ -303,15 +303,18 @@ frontend:
 
   - task: "Customer Portal - Makes Dropdown"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test 'All Makes' dropdown population with expected makes."
+      - working: true
+        agent: "testing"
+        comment: "Makes dropdown is correctly populated with all expected makes: BMW, Chevrolet, Ford, Honda, Jeep, Mercedes-Benz, Tesla, and Toyota. The dropdown functions properly when selecting different makes."
 
   - task: "Dealer Portal - Inventory Dashboard"
     implemented: true
