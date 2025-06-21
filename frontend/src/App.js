@@ -1606,9 +1606,11 @@ const InventoryPage = () => <div className="min-h-screen bg-gray-50 py-8"><div c
 // Service & Repairs Page
 const ServicePage = () => {
   const [repairShops, setRepairShops] = useState([]);
+  const [allShops, setAllShops] = useState([]);
   const [selectedService, setSelectedService] = useState('');
   const [estimate, setEstimate] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [zipCode, setZipCode] = useState('');
   const [bookingForm, setBookingForm] = useState({
     vehicle_make: '',
     vehicle_model: '',
@@ -1635,16 +1637,70 @@ const ServicePage = () => {
     loadRepairShops();
   }, []);
 
-  const loadRepairShops = async () => {
+  const loadRepairShops = async (searchZip = '') => {
     setLoading(true);
     try {
       const response = await axios.get(`${API}/repair-shops?city=Nashville&state=TN`);
-      setRepairShops(response.data.repair_shops);
+      const shops = response.data.repair_shops;
+      
+      // Add more shops for different zip codes
+      const expandedShops = [
+        ...shops,
+        {
+          id: "shop4",
+          name: "Quick Lube Express",
+          address: "123 Oak St, Nashville, TN 37203",
+          phone: "(615) 555-0104",
+          rating: 4.5,
+          services: ["Oil Change", "Inspection", "Tire Service"],
+          hours: "Mon-Sat 8AM-8PM, Sun 10AM-6PM",
+          distance: "1.2 miles",
+          zipCode: "37203"
+        },
+        {
+          id: "shop5",
+          name: "Brentwood Auto Center", 
+          address: "456 Wilson Pike, Brentwood, TN 37027",
+          phone: "(615) 555-0105",
+          rating: 4.7,
+          services: ["Brake Service", "Engine Repair", "Transmission", "Oil Change"],
+          hours: "Mon-Fri 7AM-6PM, Sat 8AM-4PM",
+          distance: "12.3 miles",
+          zipCode: "37027"
+        },
+        {
+          id: "shop6",
+          name: "Tire World Plus",
+          address: "789 Murfreesboro Rd, Nashville, TN 37217",
+          phone: "(615) 555-0106", 
+          rating: 4.4,
+          services: ["Tire Service", "Oil Change", "Brake Service", "AC Repair"],
+          hours: "Mon-Fri 8AM-7PM, Sat 8AM-5PM",
+          distance: "5.8 miles",
+          zipCode: "37217"
+        }
+      ];
+
+      setAllShops(expandedShops);
+      
+      // Filter by zip code if provided
+      if (searchZip) {
+        const filtered = expandedShops.filter(shop => 
+          shop.zipCode === searchZip || shop.address.includes(searchZip)
+        );
+        setRepairShops(filtered.length > 0 ? filtered : expandedShops);
+      } else {
+        setRepairShops(expandedShops);
+      }
     } catch (error) {
       console.error('Error loading repair shops:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleZipSearch = () => {
+    loadRepairShops(zipCode);
   };
 
   const getEstimate = async () => {
