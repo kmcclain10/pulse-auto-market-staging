@@ -158,6 +158,75 @@ class RepairShopService:
             if "_id" in service:
                 service["_id"] = str(service["_id"])
         return services
+    
+    async def get_nearby_repair_shops(self, city: str, state: str, service_type: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Get nearby repair shops"""
+        # Sample repair shops data
+        repair_shops = [
+            {
+                "id": "shop1",
+                "name": "Nashville Auto Care",
+                "address": "123 Main St, Nashville, TN 37201",
+                "phone": "(615) 555-0101",
+                "rating": 4.8,
+                "services": ["Oil Change", "Brake Service", "Tire Service", "Engine Repair"],
+                "hours": "Mon-Fri 8AM-6PM, Sat 8AM-4PM",
+                "distance": "2.3 miles"
+            },
+            {
+                "id": "shop2", 
+                "name": "Music City Motors",
+                "address": "456 Broadway, Nashville, TN 37203",
+                "phone": "(615) 555-0102",
+                "rating": 4.6,
+                "services": ["Transmission", "AC Repair", "Oil Change", "Inspection"],
+                "hours": "Mon-Fri 7AM-7PM, Sat 9AM-5PM",
+                "distance": "3.1 miles"
+            },
+            {
+                "id": "shop3",
+                "name": "Franklin Auto Service",
+                "address": "789 Cool Springs Blvd, Franklin, TN 37067", 
+                "phone": "(615) 555-0103",
+                "rating": 4.9,
+                "services": ["Oil Change", "Brake Service", "Engine Diagnostics", "Tire Service"],
+                "hours": "Mon-Fri 8AM-6PM, Sat 8AM-2PM",
+                "distance": "8.5 miles"
+            }
+        ]
+        
+        # Filter by service type if specified
+        if service_type:
+            repair_shops = [shop for shop in repair_shops if service_type in shop["services"]]
+            
+        return repair_shops
+    
+    async def get_service_estimates(self, service_type: str, vehicle_make: str, vehicle_model: str) -> Dict[str, Any]:
+        """Get service cost estimates"""
+        estimates = {
+            "Oil Change": {"min": 35, "max": 75, "average": 55},
+            "Brake Service": {"min": 200, "max": 500, "average": 350},
+            "Tire Service": {"min": 100, "max": 800, "average": 400},
+            "Engine Repair": {"min": 500, "max": 2500, "average": 1200},
+            "Transmission": {"min": 1500, "max": 4000, "average": 2500},
+            "AC Repair": {"min": 150, "max": 800, "average": 400},
+            "Inspection": {"min": 25, "max": 50, "average": 35}
+        }
+        
+        base_estimate = estimates.get(service_type, {"min": 100, "max": 500, "average": 250})
+        
+        # Adjust for vehicle make (luxury brands cost more)
+        luxury_brands = ["BMW", "Mercedes-Benz", "Audi", "Lexus", "Infiniti"]
+        multiplier = 1.3 if vehicle_make in luxury_brands else 1.0
+        
+        return {
+            "service_type": service_type,
+            "vehicle": f"{vehicle_make} {vehicle_model}",
+            "min_cost": round(base_estimate["min"] * multiplier),
+            "max_cost": round(base_estimate["max"] * multiplier),
+            "average_cost": round(base_estimate["average"] * multiplier),
+            "note": "Prices may vary based on vehicle condition and shop location"
+        }
 
 # Initialize CRM services
 image_manager = VehicleImageManager(db)
