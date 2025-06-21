@@ -1,0 +1,35 @@
+🚀 Testing Advanced Deep Scraper
+============================================================
+
+🏢 DEEP SCRAPING: Serra Used Cars (Alabama)
+   🌐 URL: https://www.serrausedcars.com
+   🔍 Finding inventory page...
+   ✓ Found inventory link: https://www.serrausedcars.com/mysavedvehicles
+   ✓ Found inventory link: https://www.serrausedcars.com/searchnew.aspx
+   ✓ Found inventory link: https://www.serrausedcars.com/serra-buys-cars.html
+   ✓ Found inventory link: https://www.serrausedcars.com/searchused.aspx
+   ✓ Found inventory link: https://www.serrausedcars.com/under-15k.html
+   ✓ Found inventory link: https://www.serrausedcars.com#preownedNavMenu
+   📋 Using inventory URL: https://www.serrausedcars.com/mysavedvehicles
+   🔍 Scanning inventory pages for vehicle details...
+   ✅ Total vehicle detail links found: 0
+   ❌ No vehicle detail links found
+
+🏢 DEEP SCRAPING: Atlanta Auto Max (Georgia)
+   🌐 URL: https://www.atlantaautomax.com
+   🔍 Finding inventory page...
+   ❌ Could not find inventory page
+
+🏢 DEEP SCRAPING: Off Lease Only (Florida)
+   🌐 URL: https://www.offleaseonly.com
+   🔍 Finding inventory page...
+   ❌ Error finding inventory page: Cannot connect to host www.offleaseonly.com:443 ssl:default [[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1016)]
+   📋 Using inventory URL: https://www.offleaseonly.com
+   🔍 Scanning inventory pages for vehicle details...
+   ❌ Error on page 1: Cannot connect to host www.offleaseonly.com:443 ssl:default [[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1016)]
+   ✅ Total vehicle detail links found: 0
+   ❌ No vehicle detail links found
+
+🎉 DEEP SCRAPING COMPLETE!
+📊 Total vehicles: 0
+🖼️  Vehicles with 5+ photos: 0

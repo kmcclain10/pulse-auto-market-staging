@@ -396,3 +396,181 @@ Deal - $19,900 (1 images)
 
 🚗 Scraping City Auto Sales of Hueytown (Alabama)
    URL: https://www.cityautosalesofhueytown.com
+   ❌ Error scraping City Auto Sales of Hueytown: Cannot connect to host www.cityautosalesofhueytown.com:443 ssl:default [Connect call failed ('217.70.184.50', 443)]
+
+[26/50] Processing Edwards Motors
+
+🚗 Scraping Edwards Motors (Alabama)
+   URL: https://www.edwardsmotorsal.com
+   ❌ Error scraping Edwards Motors: Cannot connect to host www.edwardsmotorsal.com:443 ssl:default [Name or service not known]
+
+[27/50] Processing Alabama Auto Center
+
+🚗 Scraping Alabama Auto Center (Alabama)
+   URL: https://www.alabamaautocenter.com
+   ❌ Error scraping Alabama Auto Center: Cannot connect to host www.alabamaautocenter.com:443 ssl:default [Name or service not known]
+
+[28/50] Processing Precision Imports
+
+🚗 Scraping Precision Imports (Alabama)
+   URL: https://www.precisionimportsal.com
+   ❌ Error scraping Precision Imports: Cannot connect to host www.precisionimportsal.com:443 ssl:default [Name or service not known]
+
+[29/50] Processing Southland Motors
+
+🚗 Scraping Southland Motors (Alabama)
+   URL: https://www.southlandmotorsal.com
+   ❌ Error scraping Southland Motors: Cannot connect to host www.southlandmotorsal.com:443 ssl:default [Name or service not known]
+
+[30/50] Processing Premier Auto Group
+
+🚗 Scraping Premier Auto Group (Alabama)
+   URL: https://www.premierautogroupal.com
+   ❌ Error scraping Premier Auto Group: Cannot connect to host www.premierautogroupal.com:443 ssl:default [Name or service not known]
+
+🏛️  SCRAPING FLORIDA (10 dealers)
+----------------------------------------
+
+[31/50] Processing Off Lease Only
+
+🚗 Scraping Off Lease Only (Florida)
+   URL: https://www.offleaseonly.com
+   ❌ Error scraping Off Lease Only: Cannot connect to host www.offleaseonly.com:443 ssl:default [[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1016)]
+
+[32/50] Processing Tropical Auto Sales
+
+🚗 Scraping Tropical Auto Sales (Florida)
+   URL: https://www.tropicalautosalesfl.com
+   ❌ Error scraping Tropical Auto Sales: Cannot connect to host www.tropicalautosalesfl.com:443 ssl:default [Name or service not known]
+
+[33/50] Processing Auto Buying Center
+
+🚗 Scraping Auto Buying Center (Florida)
+   URL: https://www.autobuyingcenterfl.com
+   ❌ Error scraping Auto Buying Center: Cannot connect to host www.autobuyingcenterfl.com:443 ssl:default [Name or service not known]
+
+[34/50] Processing Miami Imports
+
+🚗 Scraping Miami Imports (Florida)
+   URL: https://www.miamiimportsfl.com
+   ❌ Error scraping Miami Imports: Cannot connect to host www.miamiimportsfl.com:443 ssl:default [Name or service not known]
+
+[35/50] Processing Prestige Auto Sales
+
+🚗 Scraping Prestige Auto Sales (Florida)
+   URL: https://www.prestigeautosalesfl.com
+   ❌ Error scraping Prestige Auto Sales: Cannot connect to host www.prestigeautosalesfl.com:443 ssl:default [Name or service not known]
+
+[36/50] Processing Florida Fine Cars
+
+🚗 Scraping Florida Fine Cars (Florida)
+   URL: https://www.floridafinecars.com
+   ❌ No vehicle listings found
+
+[37/50] Processing AutoMax of Brevard
+
+🚗 Scraping AutoMax of Brevard (Florida)
+   URL: https://www.automaxofbrevard.com
+   ❌ Error scraping AutoMax of Brevard: Cannot connect to host www.automaxofbrevard.com:443 ssl:default [Name or service not known]
+
+[38/50] Processing Sunshine Auto Sales
+
+🚗 Scraping Sunshine Auto Sales (Florida)
+   URL: https://www.sunshineautosalesfl.com
+   ❌ Error scraping Sunshine Auto Sales: Cannot connect to host www.sunshineautosalesfl.com:443 ssl:default [Name or service not known]
+
+[39/50] Processing Elite Auto Group
+
+🚗 Scraping Elite Auto Group (Florida)
+   URL: https://www.eliteautogroupfl.com
+   ❌ Error scraping Elite Auto Group: Cannot connect to host www.eliteautogroupfl.com:443 ssl:default [Name or service not known]
+
+[40/50] Processing Affordable Auto Sales
+
+🚗 Scraping Affordable Auto Sales (Florida)
+   URL: https://www.affordableautosalesfl.com
+   ❌ Error scraping Affordable Auto Sales: Cannot connect to host www.affordableautosalesfl.com:443 ssl:True [SSLCertVerificationError: (1, "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.affordableautosalesfl.com'. (_ssl.c:1016)")]
+
+🏛️  SCRAPING KENTUCKY (10 dealers)
+----------------------------------------
+
+[41/50] Processing Auto Max of Louisville
+
+🚗 Scraping Auto Max of Louisville (Kentucky)
+   URL: https://www.automaxoflouisville.com
+   ❌ Error scraping Auto Max of Louisville: Cannot connect to host www.automaxoflouisville.com:443 ssl:default [Name or service not known]
+
+[42/50] Processing Louisville Auto Center
+
+🚗 Scraping Louisville Auto Center (Kentucky)
+   URL: https://www.louisvilleautocenter.com
+   ❌ No vehicle listings found
+
+[43/50] Processing Prime Auto Sales
+
+🚗 Scraping Prime Auto Sales (Kentucky)
+   URL: https://www.primeautosalesky.com
+   ❌ Error scraping Prime Auto Sales: Cannot connect to host www.primeautosalesky.com:443 ssl:default [Name or service not known]
+
+[44/50] Processing Bluegrass Auto Sales
+
+🚗 Scraping Bluegrass Auto Sales (Kentucky)
+   URL: https://www.bluegrassautosalesky.com
+   ❌ Error scraping Bluegrass Auto Sales: Cannot connect to host www.bluegrassautosalesky.com:443 ssl:default [Name or service not known]
+
+[45/50] Processing Derby City Motors
+
+🚗 Scraping Derby City Motors (Kentucky)
+   URL: https://www.derbycitymotorsky.com
+   ❌ Error scraping Derby City Motors: Cannot connect to host www.derbycitymotorsky.com:443 ssl:default [Name or service not known]
+
+[46/50] Processing Kentucky Auto Sales
+
+🚗 Scraping Kentucky Auto Sales (Kentucky)
+   URL: https://www.kentuckyautosales.com
+   ❌ Error scraping Kentucky Auto Sales: Cannot connect to host www.kentuckyautosales.com:443 ssl:default [Temporary failure in name resolution]
+
+[47/50] Processing Elite Auto Sales
+
+🚗 Scraping Elite Auto Sales (Kentucky)
+   URL: https://www.eliteautosalesky.com
+   ❌ No vehicle listings found
+
+[48/50] Processing River City Auto Mart
+
+🚗 Scraping River City Auto Mart (Kentucky)
+   URL: https://www.rivercityautomart.com
+   ❌ Error scraping River City Auto Mart: Cannot connect to host www.rivercityautomart.com:443 ssl:default [Name or service not known]
+
+[49/50] Processing Affordable Autos
+
+🚗 Scraping Affordable Autos (Kentucky)
+   URL: https://www.affordableautosky.com
+   ❌ Error scraping Affordable Autos: Cannot connect to host www.affordableautosky.com:443 ssl:default [Name or service not known]
+
+[50/50] Processing Crossroads Auto Sales
+
+🚗 Scraping Crossroads Auto Sales (Kentucky)
+   URL: https://www.crossroadsautosalesky.com
+   ❌ Error scraping Crossroads Auto Sales: Cannot connect to host www.crossroadsautosalesky.com:443 ssl:default [Name or service not known]
+
+🎉 SCRAPING COMPLETE!
+📊 Total vehicles found: 35
+🖼️  Vehicles with images: 15
+
+💾 Saving 35 vehicles to database...
+🗑️  Cleared 8 existing vehicles
+✅ Successfully saved 35 vehicles to database
+🏢 Updated 3 dealer records
+
+📈 INVENTORY STATISTICS:
+   💰 Total inventory value: $693,000.00
+   💵 Average vehicle price: $19,800.00
+   🖼️  Vehicles with images: 15/35 (42.9%)
+
+🗺️  VEHICLES BY STATE:
+   Georgia: 30 vehicles
+   Tennessee: 5 vehicles
+
+🎉 SUCCESS! 35 vehicles scraped and saved!
+🔍 Your Pulse Auto Market now has real inventory with images!
