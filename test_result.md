@@ -122,15 +122,18 @@ backend:
 
   - task: "Customer Interface APIs - Vehicle Listing"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test GET /api/customer/vehicles endpoint with 8 vehicles"
+      - working: true
+        agent: "testing"
+        comment: "Customer vehicles endpoint is working correctly. It returns all 8 vehicles with the correct data structure including all required fields."
 
   - task: "Customer Interface APIs - Search Functionality"
     implemented: true
