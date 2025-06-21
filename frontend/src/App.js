@@ -1640,8 +1640,147 @@ const HomePage = () => {
   );
 };
 
-// Other page components (simplified for now)
-const InventoryPage = () => <div className="min-h-screen bg-gray-50 py-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h1 className="text-3xl font-bold text-gray-900 mb-6">Complete Inventory</h1></div></div>;
+// Complete Inventory Page - Fixed to actually show vehicles
+const InventoryPage = () => {
+  const [vehicles, setVehicles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({
+    make: '',
+    maxPrice: '',
+    maxMileage: ''
+  });
+
+  useEffect(() => {
+    loadVehicles();
+  }, []);
+
+  const loadVehicles = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${API}/customer/vehicles?limit=100`);
+      console.log('Loaded vehicles:', response.data.length);
+      setVehicles(response.data || []);
+    } catch (error) {
+      console.error('Error loading vehicles:', error);
+      setVehicles([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  const formatMileage = (mileage) => {
+    return new Intl.NumberFormat('en-US').format(mileage);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">Complete Inventory</h1>
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            <p className="mt-4 text-gray-600">Loading vehicles...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">Complete Inventory</h1>
+        
+        {/* Stats */}
+        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+          <p className="text-lg text-gray-600">
+            Showing <span className="font-semibold text-purple-600">{vehicles.length}</span> vehicles
+          </p>
+        </div>
+
+        {/* Vehicle Grid */}
+        {vehicles.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {vehicles.map((vehicle) => (
+              <div key={vehicle.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                {/* Vehicle Image */}
+                <div className="h-48 bg-gray-200 relative">
+                  {vehicle.images && vehicle.images.length > 0 ? (
+                    <img 
+                      src={vehicle.images[0]} 
+                      alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      📷 No Image
+                    </div>
+                  )}
+                  {vehicle.images && vehicle.images.length > 1 && (
+                    <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
+                      +{vehicle.images.length - 1} photos
+                    </div>
+                  )}
+                </div>
+
+                {/* Vehicle Info */}
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    {vehicle.year} {vehicle.make} {vehicle.model}
+                  </h3>
+                  
+                  <div className="space-y-2 text-sm text-gray-600">
+                    <div className="flex justify-between">
+                      <span>Price:</span>
+                      <span className="font-semibold text-purple-600">
+                        {vehicle.price ? formatPrice(vehicle.price) : 'Call for Price'}
+                      </span>
+                    </div>
+                    
+                    <div className="flex justify-between">
+                      <span>Mileage:</span>
+                      <span>{vehicle.mileage ? formatMileage(vehicle.mileage) + ' miles' : 'N/A'}</span>
+                    </div>
+                    
+                    <div className="flex justify-between">
+                      <span>Dealer:</span>
+                      <span>{vehicle.dealer_name || 'N/A'}</span>
+                    </div>
+                    
+                    {vehicle.condition && (
+                      <div className="flex justify-between">
+                        <span>Condition:</span>
+                        <span className="capitalize">{vehicle.condition}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <button className="w-full mt-4 bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition-colors">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+            <p className="text-gray-500 text-lg">No vehicles available at this time.</p>
+            <p className="text-gray-400 text-sm mt-2">Please check back later for new inventory.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 // Service & Repairs Page
 const ServicePage = () => {
   const [repairShops, setRepairShops] = useState([]);
