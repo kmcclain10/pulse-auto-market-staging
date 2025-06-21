@@ -1757,6 +1757,43 @@ const ServicePage = () => {
       </section>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Zip Code Search */}
+        <div className="mb-8">
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">📍 Find Shops Near You</h3>
+            <div className="flex space-x-4">
+              <input
+                type="text"
+                value={zipCode}
+                onChange={(e) => setZipCode(e.target.value)}
+                placeholder="Enter ZIP code (e.g., 37203, 37027)"
+                className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                maxLength="5"
+              />
+              <button
+                onClick={handleZipSearch}
+                className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all"
+              >
+                Search
+              </button>
+              <button
+                onClick={() => {
+                  setZipCode('');
+                  loadRepairShops();
+                }}
+                className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+              >
+                Show All
+              </button>
+            </div>
+            {zipCode && (
+              <p className="text-sm text-gray-600 mt-2">
+                {repairShops.length} shops found near {zipCode}
+              </p>
+            )}
+          </div>
+        </div>
+
         {/* Service Booking Section */}
         <div className="mb-12">
           <div className="bg-white rounded-xl shadow-lg p-8">
@@ -1853,7 +1890,9 @@ const ServicePage = () => {
 
         {/* Repair Shops Directory */}
         <div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">🏪 Trusted Repair Shops</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-6">
+            🏪 {zipCode ? `Repair Shops Near ${zipCode}` : 'Trusted Repair Shops'}
+          </h3>
           
           {loading ? (
             <div className="text-center py-8">
