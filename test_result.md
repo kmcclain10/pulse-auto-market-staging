@@ -107,15 +107,18 @@ user_problem_statement: "Test the Pulse Auto Market backend APIs that I just bui
 backend:
   - task: "Health Check & System Status"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Need to test GET /api/health and GET /api/ endpoints"
+      - working: true
+        agent: "testing"
+        comment: "Both health check and root endpoints are working correctly. Health endpoint returns status 'healthy' and root endpoint returns API name and version."
 
   - task: "Customer Interface APIs - Vehicle Listing"
     implemented: true
