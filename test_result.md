@@ -360,6 +360,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "Verified that the admin dashboard shows 6 stats cards including Total Vehicles (35), Active Dealers, Subscriptions, and Hot Leads. The admin interface is properly styled with the purple automotive branding."
+      - working: true
+        agent: "testing"
+        comment: "Additional testing confirms the admin dashboard shows 4 stat cards: Total Vehicles (35), Active Dealers (8), Subscriptions (5), and Hot Leads (23). The Recent Activity section shows 'Scraper found 12 vehicles' which indicates some scraping has been done, but not the full 33 vehicles mentioned in the request."
 
   - task: "Admin Dashboard - Scraping Controls"
     implemented: true
