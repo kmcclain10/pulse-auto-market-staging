@@ -814,22 +814,191 @@ const SubscriptionContent = () => (
   </div>
 );
 
-// Settings Content
-const SettingsContent = () => (
+// Additional Dealer Portal Content Components
+const AddVehicleContent = () => (
   <div>
-    <h1 className="text-3xl font-bold text-gray-900 mb-8">Settings</h1>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Add New Vehicle</h1>
     <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold mb-4">Dealership Information</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Dealership Name</label>
-          <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="John's Auto Sales" />
+          <label className="block text-sm font-medium text-gray-700 mb-2">VIN</label>
+          <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter VIN to auto-populate" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-          <input type="tel" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="(555) 123-4567" />
+          <label className="block text-sm font-medium text-gray-700 mb-2">Stock Number</label>
+          <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
+          <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
+            <option>2024</option>
+            <option>2023</option>
+            <option>2022</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Make</label>
+          <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
+            <option>Ford</option>
+            <option>Toyota</option>
+            <option>Honda</option>
+          </select>
         </div>
       </div>
+      <button className="mt-6 bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-purple-800">
+        Save Vehicle
+      </button>
+    </div>
+  </div>
+);
+
+const PhotoManagerContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Photo Manager</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">📸 Upload & Manage Vehicle Photos</h3>
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+        <p className="text-gray-600">Drag and drop photos here or click to browse</p>
+        <button className="mt-4 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+          Choose Photos
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+const PricingToolsContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Pricing Tools</h1>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-semibold mb-4">💲 Market Analysis</h3>
+        <p className="text-gray-600">Get competitive pricing recommendations based on market data.</p>
+      </div>
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-semibold mb-4">📊 Price History</h3>
+        <p className="text-gray-600">Track pricing changes and performance over time.</p>
+      </div>
+    </div>
+  </div>
+);
+
+const FollowUpContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Follow-Up Center</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">🔄 Automated Follow-Up Sequences</h3>
+      <p className="text-gray-600">Manage customer follow-up campaigns and communications.</p>
+    </div>
+  </div>
+);
+
+const CalendarContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Appointments</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">📅 Schedule Management</h3>
+      <p className="text-gray-600">Manage test drives, appointments, and deliveries.</p>
+    </div>
+  </div>
+);
+
+const ReportsContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Sales Reports</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">📊 Performance Reports</h3>
+      <p className="text-gray-600">Detailed sales and performance analytics.</p>
+    </div>
+  </div>
+);
+
+const AnalyticsContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Performance Analytics</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">📈 Advanced Analytics</h3>
+      <p className="text-gray-600">Deep dive into your dealership performance metrics.</p>
+    </div>
+  </div>
+);
+
+const MarketingContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Marketing Tools</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">📢 Marketing Campaigns</h3>
+      <p className="text-gray-600">Create and manage marketing campaigns for your inventory.</p>
+    </div>
+  </div>
+);
+
+const WebsiteBuilderContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Website Builder</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">🌐 Custom Website</h3>
+      <p className="text-gray-600">Build and customize your dealership website.</p>
+    </div>
+  </div>
+);
+
+const SocialMediaContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Social Media</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">📱 Social Media Management</h3>
+      <p className="text-gray-600">Manage your social media presence and posts.</p>
+    </div>
+  </div>
+);
+
+const FinancePartnersContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Finance Partners</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">🏦 Lending Partners</h3>
+      <p className="text-gray-600">Manage relationships with finance and lending partners.</p>
+    </div>
+  </div>
+);
+
+const TradeInToolsContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Trade-In Tools</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">🔄 Trade-In Valuations</h3>
+      <p className="text-gray-600">Tools for appraising and managing trade-in vehicles.</p>
+    </div>
+  </div>
+);
+
+const WarrantyContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Warranty Center</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">🛡️ Extended Warranties</h3>
+      <p className="text-gray-600">Manage warranty products and coverage options.</p>
+    </div>
+  </div>
+);
+
+const UserManagementContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">User Management</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">👤 Team Access</h3>
+      <p className="text-gray-600">Manage user access and permissions for your team.</p>
+    </div>
+  </div>
+);
+
+const SupportContent = () => (
+  <div>
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Help & Support</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4">❓ Support Center</h3>
+      <p className="text-gray-600">Get help and access training resources.</p>
     </div>
   </div>
 );
