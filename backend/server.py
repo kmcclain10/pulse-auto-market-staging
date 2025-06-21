@@ -767,6 +767,23 @@ async def get_scraping_job(job_id: str):
         raise HTTPException(status_code=404, detail="Job not found")
     return ScrapingJob(**job)
 
+@admin_router.post("/login")
+async def admin_login(username: str, password: str):
+    """Simple admin login"""
+    # Simple hardcoded admin credentials for now
+    if username == "admin" and password == "pulseadmin123":
+        return {
+            "status": "success",
+            "token": "admin-token-pulse-2025",
+            "user": {
+                "username": "admin",
+                "role": "admin",
+                "permissions": ["full_access"]
+            }
+        }
+    else:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
 @admin_router.get("/stats")
 async def get_admin_stats():
     """Get system statistics"""
