@@ -37,7 +37,7 @@ const InterfaceSelector = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          {interfaces.map((interface) => (
+          {interfaces.map((interfaceItem) => (
             <Link
               key={interface.path}
               to={interface.path}
