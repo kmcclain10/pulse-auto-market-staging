@@ -342,6 +342,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "Additional testing shows that while the dealer dashboard displays statistics correctly (Total Inventory: 127, Active Leads: 23, Deals in Progress: 8, Monthly Revenue: $47K), when clicking on the Inventory Manager, no actual vehicles are displayed - only a loading spinner that never resolves. There appears to be a disconnect between the dashboard stats and the actual inventory display."
+      - working: false
+        agent: "testing"
+        comment: "Found the issue: The dealer inventory manager is making API calls to '/api/customer/vehicles?limit=50' instead of '/api/dealer/vehicles'. The dealer API endpoint requires a dealer_id parameter which is not being provided. This explains why the inventory manager is stuck in a loading state."
 
   - task: "Admin Dashboard - Stats Display"
     implemented: true
