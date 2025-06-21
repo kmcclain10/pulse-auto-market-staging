@@ -303,6 +303,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "Verified that the inventory page shows 6 vehicles including Ford F-150s and Toyota Camrys with real dealer photos. The search functionality works properly with filters for make, model, price, and mileage."
+      - working: true
+        agent: "testing"
+        comment: "Additional testing shows the customer portal displays 12 vehicles with real dealer photos (Acura MDX models). The vehicles are properly displayed with images, pricing ($11,990), and vehicle details. The search functionality is working correctly."
 
   - task: "Customer Portal - Makes Dropdown"
     implemented: true
