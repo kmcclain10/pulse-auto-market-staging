@@ -794,7 +794,172 @@ const HomePage = () => {
 // Other page components (simplified for now)
 const InventoryPage = () => <div className="min-h-screen bg-gray-50 py-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h1 className="text-3xl font-bold text-gray-900 mb-6">Complete Inventory</h1></div></div>;
 const ServicePage = () => <div className="min-h-screen bg-gray-50 py-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h1 className="text-3xl font-bold text-gray-900 mb-6">Service & Repairs</h1></div></div>;
-const AdminPortal = () => <div className="min-h-screen bg-gray-50 py-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h1 className="text-3xl font-bold text-gray-900 mb-6">Admin Dashboard</h1></div></div>;
+// Admin Portal with Real-time Scraper Status
+const AdminPortal = () => {
+  const [scrapeStatus, setScrapeStatus] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    checkScrapeStatus();
+    const interval = setInterval(checkScrapeStatus, 5000); // Check every 5 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  const checkScrapeStatus = async () => {
+    try {
+      const response = await axios.get(`${API}/admin/scrape-status`);
+      setScrapeStatus(response.data);
+    } catch (error) {
+      console.error('Error checking scrape status:', error);
+    }
+  };
+
+  const startDealerScraping = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API}/admin/scrape-dealers`);
+      alert(`Started scraping 50 dealers! ETA: ${response.data.estimated_time}`);
+      checkScrapeStatus();
+    } catch (error) {
+      alert('Failed to start scraping');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
+        
+        {/* Scraper Control Panel */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-800">Multi-Dealer Scraper</h2>
+            <div className="flex items-center space-x-3">
+              {scrapeStatus?.is_running ? (
+                <span className="flex items-center text-green-600">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse mr-2"></div>
+                  Scraping in Progress
+                </span>
+              ) : (
+                <span className="flex items-center text-gray-500">
+                  <div className="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
+                  Idle
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h3 className="text-lg font-semibold text-blue-800">Target Dealers</h3>
+              <p className="text-3xl font-bold text-blue-600">50</p>
+              <p className="text-sm text-blue-600">Across 5 states</p>
+            </div>
+            <div className="bg-green-50 p-4 rounded-lg">
+              <h3 className="text-lg font-semibold text-green-800">Current Inventory</h3>
+              <p className="text-3xl font-bold text-green-600">{scrapeStatus?.current_vehicles || 0}</p>
+              <p className="text-sm text-green-600">Vehicles in database</p>
+            </div>
+            <div className="bg-purple-50 p-4 rounded-lg">
+              <h3 className="text-lg font-semibold text-purple-800">Status</h3>
+              <p className="text-lg font-bold text-purple-600">
+                {scrapeStatus?.is_running ? 'Active' : 'Ready'}
+              </p>
+              <p className="text-sm text-purple-600">
+                {scrapeStatus?.is_running ? 'Scraping websites...' : 'Ready to scrape'}
+              </p>
+            </div>
+          </div>
+
+          {/* Control Button */}
+          <div className="mb-6">
+            <button
+              onClick={startDealerScraping}
+              disabled={loading || scrapeStatus?.is_running}
+              className={`px-6 py-3 rounded-lg font-medium ${
+                loading || scrapeStatus?.is_running
+                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
+            >
+              {loading ? 'Starting...' : scrapeStatus?.is_running ? 'Scraping in Progress...' : 'Start Multi-Dealer Scraping'}
+            </button>
+          </div>
+
+          {/* Live Log Output */}
+          {scrapeStatus?.log_output && (
+            <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm max-h-64 overflow-y-auto">
+              <h4 className="text-white font-bold mb-2">Live Scraper Output:</h4>
+              <pre className="whitespace-pre-wrap">{scrapeStatus.log_output}</pre>
+            </div>
+          )}
+        </div>
+
+        {/* Dealer List */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Target Dealers by State</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div>
+              <h3 className="font-bold text-gray-700 mb-2">Georgia (10)</h3>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Atlanta Auto Max</li>
+                <li>• Motor Max</li>
+                <li>• Atlanta Used Cars</li>
+                <li>• Gravity Autos Roswell</li>
+                <li>• Select Luxury Motors</li>
+                <li>• + 5 more dealers</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-700 mb-2">Tennessee (10)</h3>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• City Auto Sales</li>
+                <li>• Auto Universe</li>
+                <li>• Dixie Motors</li>
+                <li>• East Tennessee Auto Outlet</li>
+                <li>• Budget Auto Sales</li>
+                <li>• + 5 more dealers</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-700 mb-2">Alabama (10)</h3>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Birmingham Auto Auction</li>
+                <li>• Serra Used Cars</li>
+                <li>• Auto Mart</li>
+                <li>• Highline Imports</li>
+                <li>• + 6 more dealers</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-700 mb-2">Florida (10)</h3>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Off Lease Only</li>
+                <li>• Tropical Auto Sales</li>
+                <li>• Auto Buying Center</li>
+                <li>• Miami Imports</li>
+                <li>• + 6 more dealers</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-700 mb-2">Kentucky (10)</h3>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Auto Max of Louisville</li>
+                <li>• Louisville Auto Center</li>
+                <li>• Prime Auto Sales</li>
+                <li>• Bluegrass Auto Sales</li>
+                <li>• + 6 more dealers</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Main App Component
 function App() {
