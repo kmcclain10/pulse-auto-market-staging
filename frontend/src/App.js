@@ -1981,7 +1981,7 @@ const ServicePage = () => {
           id: "shop5",
           name: "Brentwood Auto Center", 
           address: "456 Wilson Pike, Brentwood, TN 37027",
-          phone: "(615) 555-0105",
+          phone: "(615) 372-8900",
           rating: 4.7,
           services: ["Brake Service", "Engine Repair", "Transmission", "Oil Change"],
           hours: "Mon-Fri 7AM-6PM, Sat 8AM-4PM",
@@ -1992,12 +1992,23 @@ const ServicePage = () => {
           id: "shop6",
           name: "Tire World Plus",
           address: "789 Murfreesboro Rd, Nashville, TN 37217",
-          phone: "(615) 555-0106", 
+          phone: "(615) 244-7777", 
           rating: 4.4,
           services: ["Tire Service", "Oil Change", "Brake Service", "AC Repair"],
           hours: "Mon-Fri 8AM-7PM, Sat 8AM-5PM",
           distance: "5.8 miles",
           zipCode: "37217"
+        },
+        {
+          id: "shop7",
+          name: "Franklin Auto Repair",
+          address: "321 Cool Springs Blvd, Franklin, TN 37067",
+          phone: "(615) 791-2345",
+          rating: 4.6,
+          services: ["Engine Diagnostics", "Brake Service", "Oil Change", "Inspection"],
+          hours: "Mon-Fri 8AM-6PM, Sat 9AM-3PM",
+          distance: "15.2 miles",
+          zipCode: "37067"
         }
       ];
 
