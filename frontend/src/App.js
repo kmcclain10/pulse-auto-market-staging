@@ -1983,7 +1983,7 @@ const ServicePage = () => {
                 type="text"
                 value={zipCode}
                 onChange={(e) => setZipCode(e.target.value)}
-                placeholder="Enter ZIP code (e.g., 37203, 37027)"
+                placeholder="Enter ZIP code (e.g., 37203, 37027, 37217)"
                 className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 maxLength="5"
               />
@@ -2004,9 +2004,16 @@ const ServicePage = () => {
               </button>
             </div>
             {zipCode && (
-              <p className="text-sm text-gray-600 mt-2">
-                {repairShops.length} shops found near {zipCode}
-              </p>
+              <div className="mt-3">
+                <p className="text-sm text-gray-600">
+                  Showing {repairShops.length} shops for ZIP code {zipCode}
+                </p>
+                {repairShops.length === 0 && (
+                  <p className="text-sm text-orange-600 mt-1">
+                    No shops found. Try ZIP codes: 37201, 37203, 37027, 37217
+                  </p>
+                )}
+              </div>
             )}
           </div>
         </div>
