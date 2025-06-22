@@ -1728,13 +1728,13 @@ const InventoryPage = () => {
         {/* Vehicle Grid */}
         {vehicles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {vehicles.map((vehicle) => (
+            {vehicles.map((vehicle, index) => (
               <div key={vehicle.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 {/* Vehicle Image */}
                 <div className="h-48 bg-gray-200 relative">
                   {vehicle.images && vehicle.images.length > 0 ? (
                     <img 
-                      src={vehicle.images[Math.min(Math.floor(Math.random() * vehicle.images.length), vehicle.images.length - 1)]} 
+                      src={vehicle.images[index % vehicle.images.length]} 
                       alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
                       className="w-full h-full object-cover"
                       loading="lazy"
