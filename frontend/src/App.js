@@ -2245,15 +2245,110 @@ const ServicePage = () => {
 };
 // Admin Portal with Complete CRM System
 const AdminPortal = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loginForm, setLoginForm] = useState({ username: '', password: '' });
+  const [loginError, setLoginError] = useState('');
   const [activeTab, setActiveTab] = useState('dashboard');
   const [scrapeStatus, setScrapeStatus] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    checkScrapeStatus();
-    const interval = setInterval(checkScrapeStatus, 5000);
-    return () => clearInterval(interval);
+    // Check if already logged in
+    const adminAuth = localStorage.getItem('adminAuth');
+    if (adminAuth === 'authenticated') {
+      setIsAuthenticated(true);
+    }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      checkScrapeStatus();
+      const interval = setInterval(checkScrapeStatus, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated]);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    
+    // Admin credentials
+    if (loginForm.username === 'admin' && loginForm.password === 'pulseadmin123') {
+      setIsAuthenticated(true);
+      localStorage.setItem('adminAuth', 'authenticated');
+      setLoginError('');
+    } else {
+      setLoginError('Invalid username or password');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('adminAuth');
+    setLoginForm({ username: '', password: '' });
+  };
+
+  // Login screen
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900">Admin Login</h2>
+            <p className="text-gray-600 mt-2">Access the admin dashboard</p>
+          </div>
+          
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                Username
+              </label>
+              <input
+                id="username"
+                type="text"
+                value={loginForm.username}
+                onChange={(e) => setLoginForm({...loginForm, username: e.target.value})}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                placeholder="admin"
+                required
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={loginForm.password}
+                onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                placeholder="••••••••••••"
+                required
+              />
+            </div>
+            
+            {loginError && (
+              <div className="text-red-600 text-sm text-center">
+                {loginError}
+              </div>
+            )}
+            
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+            >
+              Sign In
+            </button>
+          </form>
+          
+          <div className="mt-6 text-center text-sm text-gray-500">
+            Demo credentials: admin / pulseadmin123
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const checkScrapeStatus = async () => {
     try {
