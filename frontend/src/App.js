@@ -39,19 +39,20 @@ const Header = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-200 hover:scale-105"
+                className="text-accent-700 hover:text-primary-600 font-medium transition-colors relative group"
               >
                 {item.name}
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-primary-600 to-secondary-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
               </Link>
             ))}
           </nav>
 
-          {/* Hamburger Menu Button */}
+          {/* Mobile Menu Button */}
           <button
+            className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-accent-200 text-accent-600 hover:bg-accent-50 hover:text-primary-600 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-purple-50 transition-colors"
           >
-            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isMenuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
