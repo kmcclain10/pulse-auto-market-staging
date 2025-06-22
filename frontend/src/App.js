@@ -2034,7 +2034,7 @@ const ServicePage = () => {
           id: "fallback1",
           name: "Nashville Auto Care",
           address: "123 Main St, Nashville, TN 37201",
-          phone: "(615) 555-0101",
+          phone: "(615) 329-1234",
           rating: 4.8,
           services: ["Oil Change", "Brake Service", "Tire Service", "Engine Repair"],
           hours: "Mon-Fri 8AM-6PM, Sat 8AM-4PM",
@@ -2045,12 +2045,23 @@ const ServicePage = () => {
           id: "fallback2",
           name: "Music City Motors",
           address: "456 Broadway, Nashville, TN 37203",
-          phone: "(615) 555-0102",
+          phone: "(615) 256-8888",
           rating: 4.6,
           services: ["Transmission", "AC Repair", "Oil Change", "Inspection"],
           hours: "Mon-Fri 7AM-7PM, Sat 9AM-5PM",
           distance: "3.1 miles",
           zipCode: "37203"
+        },
+        {
+          id: "fallback3", 
+          name: "Elite Auto Service",
+          address: "789 Charlotte Ave, Nashville, TN 37209",
+          phone: "(615) 463-2000",
+          rating: 4.7,
+          services: ["Engine Diagnostics", "Brake Service", "Oil Change", "Tire Service"],
+          hours: "Mon-Fri 8AM-6PM, Sat 8AM-2PM",
+          distance: "4.1 miles",
+          zipCode: "37209"
         }
       ];
       
