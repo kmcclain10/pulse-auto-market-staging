@@ -2376,6 +2376,12 @@ const AdminPortal = () => {
         <div className="p-6 border-b">
           <h2 className="text-xl font-bold text-gray-800">Admin Control</h2>
           <p className="text-sm text-gray-600">Pulse Auto Market</p>
+          <button
+            onClick={handleLogout}
+            className="mt-2 text-xs text-red-600 hover:text-red-800"
+          >
+            🚪 Logout
+          </button>
         </div>
         
         <nav className="mt-6">
