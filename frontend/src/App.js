@@ -1823,7 +1823,10 @@ const ServicePage = () => {
       
       let shops = [];
       if (response.data && response.data.repair_shops) {
-        shops = response.data.repair_shops;
+        shops = response.data.repair_shops.map(shop => ({
+          ...shop,
+          zipCode: shop.address.match(/\d{5}/)?.[0] || "37201" // Extract ZIP from address
+        }));
       }
       
       // Add more shops for different zip codes
