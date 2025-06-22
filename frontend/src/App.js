@@ -19,22 +19,17 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50 relative">
+    <header className="bg-white shadow-lg sticky top-0 z-50 relative border-b border-primary-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          {/* Enhanced Logo */}
-          <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 rounded-xl flex items-center justify-center shadow-lg">
-              <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
-                {/* Car icon SVG */}
-                <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5H15L13.5 3H10.5L9 5H6.5C5.84 5 5.28 5.42 5.08 6.01L4 10V21C4 21.55 4.45 22 5 22H6C6.55 22 7 21.55 7 21V20H17V21C17 21.55 17.45 22 18 22H19C19.55 22 20 21.55 20 21V10L18.92 6.01ZM6.5 16C5.67 16 5 15.33 5 14.5S5.67 13 6.5 13 8 13.67 8 14.5 7.33 16 6.5 16ZM17.5 16C16.67 16 16 15.33 16 14.5S16.67 13 17.5 13 19 13.67 19 14.5 18.33 16 17.5 16ZM5 11L6.27 6.5H17.73L19 11H5Z"/>
-              </svg>
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-2 rounded-lg">
+              <span className="text-xl font-bold">⚡</span>
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
-                Pulse Auto Market
-              </h1>
-              <p className="text-sm text-gray-600">Your Trusted Car Marketplace</p>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent font-automotive">PULSE</h1>
+              <p className="text-xs text-accent-500 font-medium">Trusted Car Marketplace</p>
             </div>
           </Link>
 
