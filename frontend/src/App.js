@@ -1653,6 +1653,7 @@ const HomePage = () => {
 const InventoryPage = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [filters, setFilters] = useState({
     make: '',
     maxPrice: '',
@@ -1688,6 +1689,14 @@ const InventoryPage = () => {
 
   const formatMileage = (mileage) => {
     return new Intl.NumberFormat('en-US').format(mileage);
+  };
+
+  const handleViewDetails = (vehicle) => {
+    setSelectedVehicle(vehicle);
+  };
+
+  const closeModal = () => {
+    setSelectedVehicle(null);
   };
 
   if (loading) {
@@ -1773,7 +1782,10 @@ const InventoryPage = () => {
                     )}
                   </div>
 
-                  <button className="w-full mt-4 bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition-colors">
+                  <button 
+                    onClick={() => handleViewDetails(vehicle)}
+                    className="w-full mt-4 bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition-colors"
+                  >
                     View Details
                   </button>
                 </div>
@@ -1784,6 +1796,119 @@ const InventoryPage = () => {
           <div className="bg-white rounded-lg shadow-sm p-8 text-center">
             <p className="text-gray-500 text-lg">No vehicles available at this time.</p>
             <p className="text-gray-400 text-sm mt-2">Please check back later for new inventory.</p>
+          </div>
+        )}
+
+        {/* Vehicle Details Modal */}
+        {selectedVehicle && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                {/* Modal Header */}
+                <div className="flex justify-between items-start mb-4">
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    {selectedVehicle.year} {selectedVehicle.make} {selectedVehicle.model}
+                  </h2>
+                  <button 
+                    onClick={closeModal}
+                    className="text-gray-400 hover:text-gray-600 text-2xl"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {/* Image Gallery */}
+                {selectedVehicle.images && selectedVehicle.images.length > 0 && (
+                  <div className="mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {selectedVehicle.images.slice(0, 4).map((image, index) => (
+                        <img 
+                          key={index}
+                          src={image} 
+                          alt={`Vehicle photo ${index + 1}`}
+                          className="w-full h-48 object-cover rounded-lg"
+                        />
+                      ))}
+                    </div>
+                    {selectedVehicle.images.length > 4 && (
+                      <p className="text-center text-gray-600 mt-2">
+                        +{selectedVehicle.images.length - 4} more photos
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Vehicle Details */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Vehicle Information</h3>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Year:</span>
+                        <span className="font-medium">{selectedVehicle.year}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Make:</span>
+                        <span className="font-medium">{selectedVehicle.make}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Model:</span>
+                        <span className="font-medium">{selectedVehicle.model}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Mileage:</span>
+                        <span className="font-medium">{formatMileage(selectedVehicle.mileage)} miles</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Condition:</span>
+                        <span className="font-medium capitalize">{selectedVehicle.condition}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Transmission:</span>
+                        <span className="font-medium">{selectedVehicle.transmission || 'Automatic'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Fuel Type:</span>
+                        <span className="font-medium">{selectedVehicle.fuel_type || 'Gasoline'}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Pricing & Dealer</h3>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Price:</span>
+                        <span className="font-bold text-purple-600 text-xl">
+                          {formatPrice(selectedVehicle.price)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Dealer:</span>
+                        <span className="font-medium">{selectedVehicle.dealer_name}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Stock #:</span>
+                        <span className="font-medium">{selectedVehicle.stock_number || 'N/A'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">VIN:</span>
+                        <span className="font-medium text-xs">{selectedVehicle.vin || 'Available upon request'}</span>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 space-y-3">
+                      <button className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                        📞 Contact Dealer
+                      </button>
+                      <button className="w-full border-2 border-purple-600 text-purple-600 py-3 px-4 rounded-lg hover:bg-purple-50 transition-colors font-medium">
+                        🚗 Schedule Test Drive
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
