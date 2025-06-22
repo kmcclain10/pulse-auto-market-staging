@@ -72,14 +72,14 @@ const Header = () => {
             ></div>
             
             {/* Mobile menu panel */}
-            <div className="absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 md:hidden">
+            <div className="absolute top-full left-0 right-0 bg-white border-t border-accent-200 shadow-automotive z-50 md:hidden">
               <nav className="flex flex-col">
                 {menuItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.path}
                     onClick={() => setIsMenuOpen(false)}
-                    className="text-gray-700 hover:text-purple-600 font-medium py-4 px-6 border-b border-gray-100 hover:bg-purple-50 transition-colors"
+                    className="text-accent-700 hover:text-primary-600 hover:bg-primary-50 font-medium py-4 px-6 border-b border-accent-100 transition-colors"
                   >
                     {item.name}
                   </Link>
