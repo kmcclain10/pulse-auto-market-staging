@@ -1734,9 +1734,10 @@ const InventoryPage = () => {
                 <div className="h-48 bg-gray-200 relative">
                   {vehicle.images && vehicle.images.length > 0 ? (
                     <img 
-                      src={vehicle.images[0]} 
+                      src={vehicle.images[Math.min(Math.floor(Math.random() * vehicle.images.length), vehicle.images.length - 1)]} 
                       alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">
@@ -1745,7 +1746,7 @@ const InventoryPage = () => {
                   )}
                   {vehicle.images && vehicle.images.length > 1 && (
                     <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
-                      +{vehicle.images.length - 1} photos
+                      {vehicle.images.length} photos
                     </div>
                   )}
                 </div>
